@@ -72,14 +72,15 @@ const absoluteImage = Astro.site ? new URL(asset(image), Astro.site).href : asse
       <div class="footer-bottom"><span>© {new Date().getFullYear()} {t.copyright}</span><span>{t.tagline}</span></div>
     </footer>
     <script>
+      import { asset } from '../lib/site';
       const menu = document.querySelector<HTMLButtonElement>('.menu-toggle');
       const nav = document.querySelector<HTMLElement>('#main-nav');
       function closeMenu() { menu?.setAttribute('aria-expanded', 'false'); nav?.classList.remove('is-open'); }
       menu?.addEventListener('click', () => { const open = menu.getAttribute('aria-expanded') !== 'true'; menu.setAttribute('aria-expanded', String(open)); nav?.classList.toggle('is-open', open); });
       document.addEventListener('keydown', event => { if (event.key === 'Escape' && menu?.getAttribute('aria-expanded') === 'true') { closeMenu(); menu.focus(); } });
       nav?.addEventListener('click', event => { if ((event.target as HTMLElement).closest('a')) closeMenu(); });
-      document.querySelectorAll<HTMLImageElement>('img').forEach(img => {
-        const fallback = () => { if (!img.src.endsWith('/media/game/strategy.webp')) { img.srcset = ''; img.src = '/media/game/strategy.webp'; } };
+      document.querySelectorAll<HTMLImageElement>('img[src]').forEach(img => {
+        const fallback = () => { if (!img.src.endsWith('/media/game/strategy.webp')) { img.srcset = ''; img.src = asset('/media/game/strategy.webp'); } };
         img.addEventListener('error', fallback, { once: true });
         if (img.complete && img.naturalWidth === 0) fallback();
       });
