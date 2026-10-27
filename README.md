@@ -50,7 +50,7 @@ QQ 群链接维护在 `src/lib/site.ts` 的 `site.qqGroupLinks`，键为群号�
 
 单个语种请求失败时保留该语种旧内容；两个源均失败但已有可用快照时，命令打印警告并继续。没有快照且两个源均失败时退出报错。已有快照损坏时直接报错并保留原文件，避免覆盖历史。请求有超时、重试和体积限制。
 
-远端 HTML 只保留经过清洗的基础内容。新闻图片仅允许来自 Steam CDN，下载并压缩为最大边 1600px 的 WebP；动图保留全部帧、帧时长及循环信息。轮播转为普通图片。正文图片缺失时使用本地游戏 CG；没有封面的更新日志使用 `public/media/news/fix.svg`。图片来源记录在 `public/media/news/sources.json`。
+远端 HTML 只保留经过清洗的基础内容。新闻图片仅允许来自 Steam CDN，下载并压缩为最大边 1600px 的 WebP；动图保留全部帧、帧时长及循环信息。轮播转为普通图片。正文图片缺失时使用本地游戏 CG；没有封面的更新日志使用小尺寸维修工具图标 `public/media/news/fix.svg`，不显示 FIX 文字。图标来自 Heroicons（MIT，许可见同目录 `repair-icon.LICENSE.txt`）。图片来源记录在 `public/media/news/sources.json`。
 
 `public/media/news/cache-versions.json` 记录图片处理版本。同步会刷新旧版本的缓存（包含已退出 RSS 的历史图片），成功后原子替换；刷新失败继续使用原有图片，下次重试。请将此文件与图片一并保存到版本库。
 

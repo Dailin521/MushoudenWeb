@@ -15,7 +15,7 @@ const pagePath = (n: number) => n === 1 ? '' : `news/page/${n}`;
       {entries.map((entry, index) => {
         const { content, isFallback, actualLocale } = newsContent(entry, locale);
         return <article class:list={['news-row', { reverse: index % 2 === 1 }]}>
-          <a class="news-cover" href={url(locale, `news/${entry.id}`)} tabindex="-1" aria-hidden="true">
+          <a class:list={['news-cover', { 'patch-cover': content.cover === '/media/news/fix.svg' }]} href={url(locale, `news/${entry.id}`)} tabindex="-1" aria-hidden="true">
             <img src={asset(content.cover || '/media/game/strategy.webp')} alt="" width="800" height="540" loading={index === 0 ? 'eager' : 'lazy'} fetchpriority={index === 0 ? 'high' : 'auto'} />
           </a>
           <div class="news-text" lang={actualLocale === 'zh' ? 'zh-CN' : 'en'}>
