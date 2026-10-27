@@ -157,8 +157,7 @@
   .about-header { display: grid; grid-template-columns: 1.2fr 1fr; align-items: end; gap: 64px; padding: 64px 0 48px; }
   .about-header h1 { color: var(--red-dark); font-size: clamp(40px, 4.2vw, 60px); font-weight: 650; line-height: 1.15; letter-spacing: -.045em; margin: 14px 0 20px; }
   .about-intro { font-size: 20px; line-height: 1.65; }
-  .about-operator p { max-width: 440px; color: var(--muted); font-size: 16px; }
-  .about-operator .text-link { margin-top: 16px; }
+  .about-contact { justify-self: end; }
   .about-work { display: grid; grid-template-columns: 1.2fr 1fr; align-items: center; gap: 64px; border-top: 1px solid var(--line); padding-top: 48px; }
   .about-image > img { width: 100%; height: auto; }
   .about-image figcaption { font-size: 12px; color: var(--muted); margin-top: 10px; }
@@ -253,6 +252,7 @@
   .about-header { grid-template-columns: 1fr; gap: 24px; padding: 40px 0 32px; }
   .about-header h1 { margin: 12px 0 16px; }
   .about-intro { font-size: 18px; }
+  .about-contact { justify-self: start; }
   .about-work { grid-template-columns: 1fr; gap: 28px; padding-top: 32px; }
   .about-work-copy h2 { margin-bottom: 16px; }
   .contact-heading { padding: 38px 0 28px; }
