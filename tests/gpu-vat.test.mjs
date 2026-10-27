@@ -24,7 +24,10 @@ test('published VAT assets contain all five clips, valid indices and moving vert
   const packed = gunzipSync(await readFile('public' + model.positionsUrl));
   const positions = decodePositions(packed, model.vertexCount);
   assert.equal(positions.length, model.textureWidth * model.textureHeight * 2);
-  const indexBytes = await readFile('public' + model.indicesUrl);
+  assert.ok(positions.every(value => value <= model.positionMax));
+  const vertices = gunzipSync(await readFile('public' + model.verticesUrl));
+  assert.equal(vertices.length, model.vertexCount * 40);
+  const indexBytes = gunzipSync(await readFile('public' + model.indicesUrl));
   const indices = new Uint16Array(indexBytes.buffer, indexBytes.byteOffset, indexBytes.length / 2);
   assert.equal(indices.length, model.indexCount);
   assert.ok(indices.every(i => i < model.vertexCount));
@@ -35,5 +38,17 @@ test('published VAT assets contain all five clips, valid indices and moving vert
     const start = clip.offset * model.vertexCount * 2;
     const middle = (clip.offset + Math.floor(clip.times.length / 2)) * model.vertexCount * 2;
     assert.notDeepEqual(positions.slice(start, start + model.vertexCount * 2), positions.slice(middle, middle + model.vertexCount * 2));
+  }
+});
+
+test('the complete opening stays below 4 MB with Opus in either language', async () => {
+  const model = JSON.parse(await readFile('src/data/zhaoyun-gpu.json', 'utf8'));
+  const scene = JSON.parse(await readFile('src/data/startscene.json', 'utf8'));
+  for (const logo of [scene.logoZh, scene.logoEn]) {
+    const urls = [model.positionsUrl, model.verticesUrl, model.indicesUrl, model.atlasUrl, scene.background, logo, scene.audio.ogg.url, '/media/game/zhaoyun.webp'];
+    const files = await Promise.all(urls.map(url => readFile('public' + url)));
+    assert.ok(files.reduce((sum, file) => sum + file.length, 0) < 4_000_000);
+    assert.equal(files[3].toString('ascii', 8, 12), 'WEBP');
+    assert.equal(files[6].toString('ascii', 0, 4), 'OggS');
   }
 });

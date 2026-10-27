@@ -1,40 +1,68 @@
 ---
 import { asset, type Locale } from '../lib/site';
+import scene from '../data/startscene.json';
 interface Props { locale: Locale }
 const { locale } = Astro.props;
 const label = locale === 'zh' ? '《猛将三国》赵云' : 'Zhao Yun in Three Kingdoms: Mushouden';
 ---
 <figure class="game-keyart zhaoyun-hero" data-zhaoyun-hero data-locale={locale} data-playback="poster">
+  <img class="startscene-background" src={asset(scene.background)} alt="" width="2560" height="1440" fetchpriority="high" />
   <img class="zhaoyun-poster" src={asset('/media/game/zhaoyun.webp')} alt={label} width="1920" height="1080" fetchpriority="high" />
   <canvas class="zhaoyun-canvas" aria-hidden="true"></canvas>
+  <div class="startscene-logo"><img src={asset(locale === 'zh' ? scene.logoZh : scene.logoEn)} alt={locale === 'zh' ? '猛将三国' : 'Three Kingdoms: Mushouden'} width={locale === 'zh' ? 629 : 1142} height={locale === 'zh' ? 1129 : 584} /></div>
+  <canvas class="startscene-particles" aria-hidden="true"></canvas>
   <figcaption><span>{locale === 'zh' ? '乱世将至，英雄由你。' : 'History is waiting.'}</span><span>{locale === 'zh' ? '书写属于你的三国人生。' : 'Make it your own.'}</span></figcaption>
+  <button class="startscene-start" type="button" hidden>{locale === 'zh' ? '点击开始' : 'Click to begin'}<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m8 5 11 7-11 7z" /></svg></button>
+  <div class="scene-controls">
+  <button class="music-toggle" type="button" hidden aria-label={locale === 'zh' ? '关闭音乐' : 'Mute music'} aria-pressed="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M11 4 5 9H2v6h3l6 5z"/><path class="sound-waves" d="M15 8c3 2 3 6 0 8m3-11c5 4 5 10 0 14"/><path class="sound-muted" d="m15 9 6 6m0-6-6 6"/></svg>
+  </button>
   <button class="animation-toggle" type="button" hidden aria-label={locale === 'zh' ? '暂停动画' : 'Pause animation'}>
     <svg class="pause-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h3v14H7zm7 0h3v14h-3z" /></svg>
     <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m8 5 11 7-11 7z" /></svg>
   </button>
+  </div>
+  <audio class="startscene-music" preload="none"></audio>
+  <span class="scene-status" role="status" aria-live="polite"></span>
 </figure>
 <script>
   import { setupZhaoyunHero } from '../lib/zhaoyun-hero';
   document.querySelectorAll<HTMLElement>('[data-zhaoyun-hero]').forEach(setupZhaoyunHero);
 </script>
 <style>
-  .zhaoyun-hero { aspect-ratio: 2.4; background: radial-gradient(ellipse at 55% 90%, #504238 0, transparent 55%), radial-gradient(ellipse at 25% 45%, #303033, #171719 78%); }
-  .zhaoyun-hero > .zhaoyun-poster, .zhaoyun-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .zhaoyun-hero { aspect-ratio: 2.4; background: #202020; }
+  .zhaoyun-hero > .zhaoyun-poster, .zhaoyun-hero > .startscene-background, .zhaoyun-canvas, .startscene-particles { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .startscene-background { object-fit: cover; }
+  .startscene-particles { pointer-events: none; z-index: 3; }
+  .startscene-logo { position: absolute; z-index: 2; left: 14%; top: 5%; height: 74%; pointer-events: none; }
+  .startscene-logo img { width: auto; height: 100%; object-fit: contain; }
+  [data-locale='en'] .startscene-logo { left: 7%; top: 22%; height: auto; width: 42%; }
+  [data-locale='en'] .startscene-logo img { width: 100%; height: auto; }
   .zhaoyun-canvas { opacity: 0; }
   .zhaoyun-hero[data-ready] .zhaoyun-canvas { opacity: 1; }
   .zhaoyun-hero[data-ready] .zhaoyun-poster { opacity: 0; }
-  .zhaoyun-hero::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, #15151655, transparent 65%); }
-  .zhaoyun-hero figcaption { z-index: 1; pointer-events: none; }
-  .animation-toggle { position: absolute; top: 16px; right: 16px; z-index: 2; width: 44px; height: 44px; display: grid; place-items: center; color: white; background: #151516b3; border: 1px solid #ffffff50; border-radius: 50%; cursor: pointer; }
-  .animation-toggle[hidden] { display: none; }
-  .animation-toggle:hover { background: #151516; }
-  .animation-toggle:focus-visible { outline: 3px solid white; outline-offset: 3px; }
-  .animation-toggle svg { width: 22px; height: 22px; }
+  .zhaoyun-hero figcaption { z-index: 3; pointer-events: none; top: auto; bottom: 7%; transform: none; left: 7%; max-width: 55%; }
+  .zhaoyun-hero figcaption span:first-child { font-size: clamp(16px, 1.6vw, 23px); }
+  .zhaoyun-hero figcaption span:last-child { font-size: 12px; }
+  .scene-controls { position: absolute; top: 16px; right: 16px; z-index: 5; display: flex; gap: 8px; }
+  .scene-controls button { width: 44px; height: 44px; display: grid; place-items: center; color: white; background: #151516b3; border: 1px solid #ffffff50; border-radius: 50%; cursor: pointer; }
+  .scene-controls button[hidden], .startscene-start[hidden] { display: none; }
+  .scene-controls button:hover { background: #151516; }
+  .scene-controls button:focus-visible, .startscene-start:focus-visible { outline: 3px solid white; outline-offset: 3px; }
+  .scene-controls svg, .startscene-start svg { width: 22px; height: 22px; }
+  .startscene-start { position: absolute; z-index: 5; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 10px 22px; color: white; background: #1c1b1ae6; border: 1px solid #cfb99b99; border-radius: 3px; cursor: pointer; font: inherit; white-space: nowrap; }
+  .music-toggle .sound-muted, .music-toggle[aria-pressed='false'] .sound-waves { display: none; }
+  .music-toggle[aria-pressed='false'] .sound-muted { display: block; }
+  .scene-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
   .animation-toggle .play-icon, [data-playback='paused'] .animation-toggle .pause-icon, [data-playback='poster'] .animation-toggle .pause-icon { display: none; }
   [data-playback='paused'] .animation-toggle .play-icon, [data-playback='poster'] .animation-toggle .play-icon { display: block; }
   @media (max-width: 700px) {
     .zhaoyun-hero { aspect-ratio: 1.25; }
-    .zhaoyun-hero::after { background: linear-gradient(0deg, #111c, transparent 45%); }
-    .animation-toggle { top: 12px; right: 12px; }
+    .startscene-logo { left: 7%; top: 7%; height: 62%; }
+    [data-locale='en'] .startscene-logo { left: 5%; top: 25%; width: 49%; }
+    .zhaoyun-hero figcaption { left: 6%; bottom: 6%; max-width: 88%; text-shadow: 0 2px 14px #000; }
+    .zhaoyun-hero figcaption span:first-child { font-size: 18px; }
+    .zhaoyun-hero figcaption span:last-child { font-size: 10px; letter-spacing: .04em; }
+    .scene-controls { top: 12px; right: 12px; }
   }
 </style>

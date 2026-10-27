@@ -65,7 +65,8 @@ function sample(animation, time) {
 
 const clips = [];
 const samples = [];
-const fps = 30;
+const fps = 20;
+const positionMax = 4095; // 12 significant bits: subpixel at the website's display size.
 const bounds = [Infinity, Infinity, -Infinity, -Infinity];
 for (const animation of data.animations) {
   const times = new Set([0, animation.duration]);
@@ -106,9 +107,9 @@ let maxQuantizationError = 0;
 for (let frame = 0; frame < samples.length; frame++) {
   for (let i = 0; i < vertexCount * 2; i++) {
     const axis = i % 2;
-    const value = Math.round((samples[frame][i] - bounds[axis]) / extent[axis] * 65535);
+    const value = Math.round((samples[frame][i] - bounds[axis]) / extent[axis] * positionMax);
     positions[frame * vertexCount * 2 + i] = value;
-    maxQuantizationError = Math.max(maxQuantizationError, Math.abs(bounds[axis] + value / 65535 * extent[axis] - samples[frame][i]));
+    maxQuantizationError = Math.max(maxQuantizationError, Math.abs(bounds[axis] + value / positionMax * extent[axis] - samples[frame][i]));
   }
 }
 let maxInterpolationError = 0;
@@ -126,7 +127,7 @@ for (const clip of clips) {
     }
   }
 }
-if (maxQuantizationError > 0.05 || maxInterpolationError > 3) throw new Error(`Sampling error too high: ${maxQuantizationError}, ${maxInterpolationError}`);
+if (maxQuantizationError > 0.25 || maxInterpolationError > 3) throw new Error(`Sampling error too high: ${maxQuantizationError}, ${maxInterpolationError}`);
 
 // Determine the atlas convention, without changing the original image.
 const rgba = await sharp(image).ensureAlpha().raw().toBuffer();
@@ -134,6 +135,15 @@ let straightAlphaPixels = 0;
 for (let i = 0; i < rgba.length; i += 4) {
   if (rgba[i + 3] > 0 && rgba[i + 3] < 250 && Math.max(rgba[i], rgba[i + 1], rgba[i + 2]) > rgba[i + 3] + 2) straightAlphaPixels++;
 }
+// Convert the original PMA pixels to straight alpha before lossy WebP encoding.
+// This preserves soft edges; the fragment shader premultiplies after sampling.
+if (straightAlphaPixels === 0) {
+  for (let i = 0; i < rgba.length; i += 4) {
+    const alpha = rgba[i + 3];
+    for (let channel = 0; channel < 3; channel++) rgba[i + channel] = alpha ? Math.min(255, Math.round(rgba[i + channel] * 255 / alpha)) : 0;
+  }
+}
+const webAtlas = await sharp(rgba, { raw: { width, height, channels: 4 } }).webp({ quality: 86, alphaQuality: 100, effort: 6 }).toBuffer();
 await mkdir(output, { recursive: true });
 async function save(stem, extension, bytes) {
   const name = `${stem}-${createHash('sha256').update(bytes).digest('hex').slice(0, 12)}.${extension}`;
@@ -150,15 +160,15 @@ for (let i = 0; i < positions.length; i++) {
   packed[i + positions.length] = delta >>> 8;
 }
 const [atlasUrl, positionsUrl, verticesUrl, indicesUrl] = await Promise.all([
-  save('atlas', 'png', image),
+  save('atlas', 'webp', webAtlas),
   save('positions', 'bin.gz', gzipSync(packed, { level: 9 })),
-  save('vertices', 'bin', Buffer.from(geometry.buffer)),
-  save('indices', 'bin', Buffer.from(new Uint16Array(indices).buffer)),
+  save('vertices', 'bin.gz', gzipSync(Buffer.from(geometry.buffer), { level: 9 })),
+  save('indices', 'bin.gz', gzipSync(Buffer.from(new Uint16Array(indices).buffer), { level: 9 })),
 ]);
-const manifest = { version: 1, positionEncoding: 'delta16-byteplanes-gzip', sourceVersion: data.version, vertexCount, indexCount: indices.length,
+const manifest = { version: 2, positionEncoding: 'delta16-byteplanes-gzip', positionMax, sourceVersion: data.version, vertexCount, indexCount: indices.length,
   textureWidth, textureHeight, bounds: [bounds[0], bounds[1], ...extent],
   setupBounds: [data.x, data.y, data.width, data.height], atlasSize: [width, height],
-  premultipliedAlpha: straightAlphaPixels === 0,
+  premultipliedAlpha: false,
   atlasUrl, positionsUrl, verticesUrl, indicesUrl, clips };
 await writeFile('src/data/zhaoyun-gpu.json', JSON.stringify(manifest));
 const validation = { vertices: vertexCount, meshes: meshes.length, frames: samples.length, textureWidth, textureHeight,

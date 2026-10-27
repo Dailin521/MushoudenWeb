@@ -16,7 +16,8 @@
     "check": "astro check",
     "test": "node --test tests/*.test.mjs",
     "assets:prepare": "node scripts/prepare-assets.mjs",
-    "assets:bake-zhaoyun": "node scripts/bake-zhaoyun-gpu.mjs"
+    "assets:bake-zhaoyun": "node scripts/bake-zhaoyun-gpu.mjs",
+    "assets:prepare-startscene": "node scripts/prepare-startscene.mjs"
   },
   "dependencies": {
     "astro": "7.4.2",

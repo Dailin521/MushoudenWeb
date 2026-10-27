@@ -1,0 +1,22 @@
+{
+  "background": "/media/startscene/background-b8bf31c10520.webp",
+  "logoZh": "/media/startscene/logo-zh-04cfd527d810.webp",
+  "logoEn": "/media/startscene/logo-en-e24de67ec83b.webp",
+  "audio": {
+    "ogg": {
+      "url": "/media/startscene/bgm-start-0971707a5344.ogg",
+      "bytes": 1515217
+    },
+    "mp3": {
+      "url": "/media/startscene/bgm-start-ac715108bbdb.mp3",
+      "bytes": 1972393
+    }
+  },
+  "musicDelay": 0.4,
+  "logoDelay": 2,
+  "logoFade": 0.7,
+  "particleDelay": 2.3,
+  "particleInitialSpeed": 35,
+  "particleFinalSpeed": 6,
+  "particleSlowDuration": 8
+}

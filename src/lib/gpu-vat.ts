@@ -1,6 +1,7 @@
 export interface VatClip { name: string; duration: number; offset: number; times: number[] }
 export interface VatModel {
   vertexCount: number; indexCount: number; textureWidth: number; textureHeight: number;
+  positionMax: number;
   bounds: number[]; atlasSize: number[]; premultipliedAlpha: boolean;
   atlasUrl: string; positionsUrl: string; verticesUrl: string; indicesUrl: string; clips: VatClip[];
 }
@@ -35,6 +36,7 @@ uniform usampler2D uPositions;
 uniform int uTextureWidth;
 uniform int uVertexCount;
 uniform vec4 uBounds;
+uniform float uPositionMax;
 uniform vec4 uViewport;
 uniform vec3 uFrames;
 uniform vec3 uPrevious;
@@ -45,7 +47,7 @@ out vec4 vColor;
 vec2 positionAt(int frame) {
   int address = frame * uVertexCount + gl_VertexID;
   uvec2 encoded = texelFetch(uPositions, ivec2(address % uTextureWidth, address / uTextureWidth), 0).rg;
-  return uBounds.xy + vec2(encoded) / 65535.0 * uBounds.zw;
+  return uBounds.xy + vec2(encoded) / uPositionMax * uBounds.zw;
 }
 vec2 pose(vec3 frames) { return mix(positionAt(int(frames.x)), positionAt(int(frames.y)), frames.z); }
 void main() {
@@ -89,7 +91,7 @@ export function createVatRenderer(canvas: HTMLCanvasElement, model: VatModel, po
   gl.deleteShader(vertex); gl.deleteShader(fragment);
   if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(program) || 'Shader link failed');
   gl.useProgram(program);
-  const uniforms = Object.fromEntries(['uPositions', 'uTextureWidth', 'uVertexCount', 'uBounds', 'uViewport', 'uFrames', 'uPrevious', 'uTransition', 'uAtlas', 'uAtlasSize', 'uPremultiplied'].map(name => [name, gl.getUniformLocation(program, name)]));
+  const uniforms = Object.fromEntries(['uPositions', 'uTextureWidth', 'uVertexCount', 'uBounds', 'uPositionMax', 'uViewport', 'uFrames', 'uPrevious', 'uTransition', 'uAtlas', 'uAtlasSize', 'uPremultiplied'].map(name => [name, gl.getUniformLocation(program, name)]));
   const vao = gl.createVertexArray(); gl.bindVertexArray(vao);
   const vertexBuffer = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer); gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
   for (const [location, size, offset] of [[0, 2, 0], [1, 4, 8], [2, 4, 24]]) {
@@ -109,6 +111,7 @@ export function createVatRenderer(canvas: HTMLCanvasElement, model: VatModel, po
   gl.uniform1i(uniforms.uPositions, 0); gl.uniform1i(uniforms.uAtlas, 1);
   gl.uniform1i(uniforms.uTextureWidth, model.textureWidth); gl.uniform1i(uniforms.uVertexCount, model.vertexCount);
   gl.uniform4fv(uniforms.uBounds, model.bounds); gl.uniform2fv(uniforms.uAtlasSize, model.atlasSize);
+  gl.uniform1f(uniforms.uPositionMax, model.positionMax);
   gl.uniform1i(uniforms.uPremultiplied, model.premultipliedAlpha ? 1 : 0);
   gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA); gl.disable(gl.DEPTH_TEST); gl.disable(gl.CULL_FACE);
   if (gl.getError() !== gl.NO_ERROR) throw new Error('GPU resource upload failed');

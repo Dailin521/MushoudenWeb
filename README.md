@@ -80,9 +80,31 @@ npm run assets:bake-zhaoyun
 
 生成的 `src/data/zhaoyun-gpu.json` 和 `public/media/spine/zhaoyun/` 必须一起提交。普通构建和 GitHub Actions 直接使用这些产物，不需要 Unity 或源工程。资源文件名带内容哈希；重新烘焙后可删除该目录中清单不再引用的旧文件。
 
-当前为 27 个网格、3136 个顶点、5 段动画、854 帧（30 fps 加原始关键帧）。位置以 16 位整数编码，差分和 gzip 后约 3.67 MB；图集约 2.78 MB，网格约 0.15 MB。只在游戏页进入视野时加载，初始化时解压并上传一次。烘焙脚本逐帧测量量化误差，并将每个采样区间的中点插值与原始 Spine 网格比较；本次最大误差约 0.59 原素材像素，报告在 `output/zhaoyun-gpu-validation.json`。
+当前为 27 个网格、3136 个顶点、5 段动画、760 帧（20 fps 加原始关键帧，网页仍逐帧平滑插值）。位置以 12 位精度量化、通过 RG16UI 纹理读取，差分和 gzip 后约 1.84 MB；图集从 2.78 MB PNG 转为约 0.29 MB WebP，UV 和索引也使用 gzip，总计约 2.17 MB（原版 6.61 MB）。图集先从预乘 alpha 转回直通 alpha，shader 采样后再预乘，保留发丝透明边缘。
+
+只在游戏页进入视野时加载，初始化时解压并上传一次。烘焙脚本逐帧测量量化误差，并将每个采样区间的中点插值与原始 Spine 网格比较；最大单轴量化误差约 0.224、最大中点插值误差约 1.32 原素材像素，报告在 `output/zhaoyun-gpu-validation.json`。测试包含生成数据完整性与网页演出 4 MB 下载预算。
 
 支持暂停/继续、离开视野或切到后台时停止绘制。启用减少动态效果时先显示静态图，可手动播放；WebGL 2 不可用或资源加载失败时也保留静态图。
+
+### StartScene 背景、粒子、Logo 和音乐
+
+背景来自 `Canvas/BG` 的 `Res/切图/CG/BG.png`；Logo 按 `StartScene.OnChangeLan()` 使用 `logosanguo.png` / `logo_猛将_en.png`。它们分别优化为约 10 KB、101 KB、138 KB WebP。Logo 在 2 秒后用 0.7 秒淡入，网页布局适配横幅和手机。
+
+`startscene-effects.ts` 用轻量 Canvas 2D 重现三层橙色火星的飘散、成长和淡出，不载入 Unity 粒子运行时；保留源发射率 0.2 / 0.1 / 0.02、寿命 50、速度 35 → 6 和 8 秒减速。源脚本对同一 DOTween Sequence 两次调用 `SetDelay`，按其前插间隔语义合计延迟为 2.3 秒；不是两个回调之间再等待 0.8 秒。这里是网页重现，并非 Unity 粒子的逐帧录制。
+
+音乐源为 `AssetBundles/AudioClip/背景音乐/bgm_start.wav`，完整约 123 秒、21.84 MB；网页优先使用 96 kbps Opus（1.52 MB），不支持时使用 128 kbps MP3（1.97 MB）。文件头保留 `play_music_time = 0.4` 秒静音；后续循环跳过这段出场延迟。中文版整段演出资源约 3.80 MB，算上 59 KB 静态回退图后，中英文均不超过 4 MB（Opus）。
+
+首次进入统一启动音乐与视觉演出，以音频时钟驱动角色、粒子和 Logo；浏览器若拒绝有声自动播放，先保持静止并显示“点击开始”，用户点击后一起启动。暂停、离开视野、切换后台会同时暂停音乐和视觉；单独关闭音乐不影响动画。遵循减少动态效果偏好，提供手动开始入口。音频加载失败时继续静音视觉演出。
+
+```powershell
+# 需要本地 FFmpeg；普通构建和 GitHub Actions 不需要
+$env:FFMPEG_PATH='C:\path\to\ffmpeg.exe'
+# 可选：Unity Assets 换位置时设置
+$env:MUSHOUDEN_ASSETS='E:\rich\Mushouden\Code\Mushouden\Assets'
+npm run assets:prepare-startscene
+```
+
+`src/data/startscene.json` 和 `public/media/startscene/` 一起提交；新文件使用内容哈希，更新后删除清单不再引用的旧产物。源 Unity 工程只读。
 
 ## 验证与 GitHub Pages 部署
 
