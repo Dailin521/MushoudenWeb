@@ -147,6 +147,9 @@ export function setupZhaoyunHero(root: HTMLElement) {
     sync();
   });
   document.addEventListener('visibilitychange', sync);
+  document.addEventListener('play', event => {
+    if (event.target instanceof HTMLVideoElement) { paused = true; sync(); }
+  }, true);
   window.addEventListener('pagehide', () => { stopDrawing(); audio.pause(); });
   window.addEventListener('pageshow', sync);
   canvas.addEventListener('webglcontextlost', event => {
