@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import ZhaoyunHero from './ZhaoyunHero.astro';
 import { asset, copy, features, steamUrl, type Locale } from '../lib/site';
 import game from '../data/game.json';
 interface Props { locale: Locale }
@@ -9,7 +10,7 @@ const t = copy[locale];
 <Layout locale={locale} title={t.game} section="games" pathname="games" image={game.headers[locale]}>
   <div class="container game-container">
     <header class="game-heading"><span class="eyebrow">{t.released}</span><h1>{t.game}</h1><span class="game-subtitle">{locale === 'zh' ? 'THREE KINGDOMS: MUSHOUDEN' : 'A WORLD ON THE BRINK. A PATH OF YOUR OWN.'}</span></header>
-    <figure class="game-keyart"><img src={asset("/media/game/zhaoyun.webp")} alt={locale === 'zh' ? '《猛将三国》赵云角色宣传画' : 'Zhao Yun in Three Kingdoms: Mushouden'} width="1920" height="1080" fetchpriority="high" /><figcaption><span>{locale === 'zh' ? '乱世将至，英雄由你。' : 'History is waiting.'}</span><span>{locale === 'zh' ? '书写属于你的三国人生。' : 'Make it your own.'}</span></figcaption></figure>
+    <ZhaoyunHero locale={locale} />
     <section class="game-intro" aria-label={locale === 'zh' ? '游戏介绍' : 'About the game'}>
       <div class="trailer-wrap">
         <div class="trailer" data-hls={game.trailer.hls} data-error={t.videoError}>

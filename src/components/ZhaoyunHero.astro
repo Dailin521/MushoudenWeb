@@ -1,0 +1,40 @@
+---
+import { asset, type Locale } from '../lib/site';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const label = locale === 'zh' ? '《猛将三国》赵云' : 'Zhao Yun in Three Kingdoms: Mushouden';
+---
+<figure class="game-keyart zhaoyun-hero" data-zhaoyun-hero data-locale={locale} data-playback="poster">
+  <img class="zhaoyun-poster" src={asset('/media/game/zhaoyun.webp')} alt={label} width="1920" height="1080" fetchpriority="high" />
+  <canvas class="zhaoyun-canvas" aria-hidden="true"></canvas>
+  <figcaption><span>{locale === 'zh' ? '乱世将至，英雄由你。' : 'History is waiting.'}</span><span>{locale === 'zh' ? '书写属于你的三国人生。' : 'Make it your own.'}</span></figcaption>
+  <button class="animation-toggle" type="button" hidden aria-label={locale === 'zh' ? '暂停动画' : 'Pause animation'}>
+    <svg class="pause-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h3v14H7zm7 0h3v14h-3z" /></svg>
+    <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m8 5 11 7-11 7z" /></svg>
+  </button>
+</figure>
+<script>
+  import { setupZhaoyunHero } from '../lib/zhaoyun-hero';
+  document.querySelectorAll<HTMLElement>('[data-zhaoyun-hero]').forEach(setupZhaoyunHero);
+</script>
+<style>
+  .zhaoyun-hero { aspect-ratio: 2.4; background: radial-gradient(ellipse at 55% 90%, #504238 0, transparent 55%), radial-gradient(ellipse at 25% 45%, #303033, #171719 78%); }
+  .zhaoyun-hero > .zhaoyun-poster, .zhaoyun-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .zhaoyun-canvas { opacity: 0; }
+  .zhaoyun-hero[data-ready] .zhaoyun-canvas { opacity: 1; }
+  .zhaoyun-hero[data-ready] .zhaoyun-poster { opacity: 0; }
+  .zhaoyun-hero::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, #15151655, transparent 65%); }
+  .zhaoyun-hero figcaption { z-index: 1; pointer-events: none; }
+  .animation-toggle { position: absolute; top: 16px; right: 16px; z-index: 2; width: 44px; height: 44px; display: grid; place-items: center; color: white; background: #151516b3; border: 1px solid #ffffff50; border-radius: 50%; cursor: pointer; }
+  .animation-toggle[hidden] { display: none; }
+  .animation-toggle:hover { background: #151516; }
+  .animation-toggle:focus-visible { outline: 3px solid white; outline-offset: 3px; }
+  .animation-toggle svg { width: 22px; height: 22px; }
+  .animation-toggle .play-icon, [data-playback='paused'] .animation-toggle .pause-icon, [data-playback='poster'] .animation-toggle .pause-icon { display: none; }
+  [data-playback='paused'] .animation-toggle .play-icon, [data-playback='poster'] .animation-toggle .play-icon { display: block; }
+  @media (max-width: 700px) {
+    .zhaoyun-hero { aspect-ratio: 1.25; }
+    .zhaoyun-hero::after { background: linear-gradient(0deg, #111c, transparent 45%); }
+    .animation-toggle { top: 12px; right: 12px; }
+  }
+</style>

@@ -67,6 +67,26 @@ QQ 群链接维护在 `src/lib/site.ts` 的 `site.qqGroupLinks`，键为群号�
 
 游戏及工作室美术、商标和公告归各自权利人所有；仓库未为这些素材授予额外许可。
 
+## 赵云 GPU 动画
+
+中英文游戏页的主视觉使用 `ZhaoyunHero.astro`。它读取烘焙后的顶点动画纹理（VAT），由 WebGL 2 顶点 shader 读取前后两帧并插值，单次 draw call 绘制角色；浏览器没有 Spine 骨骼计算或逐帧网格上传。`open` 入场后播放 `anima_01`，每 2～3 次穿插 `anima_02/03/04`，动作之间做 0.2 秒过渡。
+
+转换参考 `E:\NewRich\TowerDefense\Code\TowerDefense\Assets\Plugins\SpineToUnity\Editor\SpineMeshBaker.cs` 中的 `SpineMeshGpuBaker` 和 `Runtime/SpineMeshGpu.shader`：离线采样世界坐标、保留关键帧、GPU 选帧和插值。赵云没有换附件、透明度或绘制顺序时间轴，因此 UV、颜色和索引固定；无需通用角色的颜色纹理、动态布局纹理与实例化。和 StartScene 的 `SkeletonGraphic` 一致，不使用 Spine clipping。
+
+源资源来自 `E:\rich\Mushouden\Code\Mushouden\Assets\Res\Spine\开始界面\开始界面切图.*`，只读取 `.skel.bytes`、`.atlas.txt` 和 `.png`。原始版本为 Spine 3.8.75；离线使用未修改的 `@pixi-spine/runtime-3.8` 解析（会输出旧版本提示），浏览器不加载该运行库。第三方许可见 `licenses/Spine-Runtimes.txt`。
+
+```powershell
+# 可选：源文件换位置时设置此目录
+$env:MUSHOUDEN_SPINE_ROOT='E:\rich\Mushouden\Code\Mushouden\Assets\Res\Spine\开始界面'
+npm run assets:bake-zhaoyun
+```
+
+生成的 `src/data/zhaoyun-gpu.json` 和 `public/media/spine/zhaoyun/` 必须一起提交。普通构建和 GitHub Actions 直接使用这些产物，不需要 Unity 或源工程。资源文件名带内容哈希；重新烘焙后可删除该目录中清单不再引用的旧文件。
+
+当前为 27 个网格、3136 个顶点、5 段动画、854 帧（30 fps 加原始关键帧）。位置以 16 位整数编码，差分和 gzip 后约 3.67 MB；图集约 2.78 MB，网格约 0.15 MB。只在游戏页进入视野时加载，初始化时解压并上传一次。烘焙脚本逐帧测量量化误差，并将每个采样区间的中点插值与原始 Spine 网格比较；本次最大误差约 0.59 原素材像素，报告在 `output/zhaoyun-gpu-validation.json`。
+
+支持暂停/继续、离开视野或切到后台时停止绘制。启用减少动态效果时先显示静态图，可手动播放；WebGL 2 不可用或资源加载失败时也保留静态图。
+
 ## 验证与 GitHub Pages 部署
 
 ```powershell
