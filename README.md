@@ -1,6 +1,6 @@
 # Team Platypus 官网
 
-《猛将三国》开发团队 Team Platypus 的中英文静态官网。采用 Astro + TypeScript，以 Team Cherry 官网的红白配色、图文交替新闻布局为参考。
+《猛将三国》开发团队 Team Platypus 的中英文静态官网。采用 Astro + TypeScript，以 Team Cherry 官网的图文交替新闻布局为参考，配色采用松绿色（主色 `#365C4B`）与白色。
 
 ## 本地启动
 
