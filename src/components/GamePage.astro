@@ -1,0 +1,75 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { asset, copy, features, steamUrl, type Locale } from '../lib/site';
+import game from '../data/game.json';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = copy[locale];
+---
+<Layout locale={locale} title={t.game} section="games" pathname="games" image={game.headers[locale]}>
+  <div class="container game-container">
+    <header class="game-heading"><span class="eyebrow">{t.released}</span><h1>{t.game}</h1><span class="game-subtitle">{locale === 'zh' ? 'THREE KINGDOMS: MUSHOUDEN' : 'A WORLD ON THE BRINK. A PATH OF YOUR OWN.'}</span></header>
+    <figure class="game-keyart"><img src={asset("/media/game/zhaoyun.webp")} alt={locale === 'zh' ? '《猛将三国》赵云角色宣传画' : 'Zhao Yun in Three Kingdoms: Mushouden'} width="1920" height="1080" fetchpriority="high" /><figcaption><span>{locale === 'zh' ? '乱世将至，英雄由你。' : 'History is waiting.'}</span><span>{locale === 'zh' ? '书写属于你的三国人生。' : 'Make it your own.'}</span></figcaption></figure>
+    <section class="game-intro" aria-label={locale === 'zh' ? '游戏介绍' : 'About the game'}>
+      <div class="trailer-wrap">
+        <div class="trailer" data-hls={game.trailer.hls} data-error={t.videoError}>
+          <video controls playsinline preload="none" poster={asset(game.trailer.poster)} aria-label={t.trailer} hidden></video>
+          <button class="trailer-play" aria-label={t.trailer}><img src={asset(game.trailer.poster)} alt="" width="600" height="337" loading="lazy" /><span class="play-circle" aria-hidden="true">▶</span><span class="trailer-caption">{t.trailer}</span></button>
+        </div>
+        <p class="video-status" aria-live="polite"></p>
+        <a class="small-link" href={steamUrl(locale)} target="_blank" rel="noopener noreferrer">{t.videoLink} ↗</a>
+      </div>
+      <div class="game-intro-text"><p>{t.gameIntro}</p><p>{t.gameIntro2}</p><a class="button" href={steamUrl(locale)} target="_blank" rel="noopener noreferrer">{t.steam}<span aria-hidden="true">↗</span></a><p class="platform-note">Windows · {locale === 'zh' ? '单人游戏' : 'Single-player'} · Steam</p></div>
+    </section>
+    <section class="features" aria-label={locale === 'zh' ? '游戏特色' : 'Game features'}>
+      {features[locale].map((feature, index) => <div class:list={['feature-row', { reverse: index % 2 === 1 }]}><img src={asset(feature.image)} alt={feature.title} width="1600" height="900" loading="lazy" /><div><span class="eyebrow">{feature.label}</span><h2>{feature.title}</h2><p>{feature.text}</p></div></div>)}
+    </section>
+    <section class="screenshots"><div class="section-heading"><h2>{t.screenshots}</h2></div><div class="screenshot-grid">{game.screenshots.map((shot, index) => <a href={asset(shot.full)} class="screenshot-link" data-gallery aria-label={locale === 'zh' ? `查看游戏截图 ${index + 1}` : `View screenshot ${index + 1}`}><img src={asset(shot.thumb)} alt={locale === 'zh' ? `《猛将三国》实机截图 ${index + 1}` : `Three Kingdoms: Mushouden gameplay ${index + 1}`} width="800" height="450" loading="lazy" /></a>)}</div></section>
+    <section class="game-cta"><span class="eyebrow">{locale === 'zh' ? '你的故事，从这里开始' : 'YOUR STORY STARTS HERE'}</span><h2>{locale === 'zh' ? '此去三国，不负少年。' : 'A new chapter awaits.'}</h2><a class="button" href={steamUrl(locale)} target="_blank" rel="noopener noreferrer">{t.steam} ↗</a></section>
+  </div>
+  <dialog class="lightbox" aria-label={t.screenshots}><button class="lightbox-close" aria-label={t.close}>×</button><img alt="" /><p class="lightbox-caption"></p></dialog>
+  <script>
+    const trailer = document.querySelector<HTMLElement>('.trailer');
+    const play = trailer?.querySelector<HTMLButtonElement>('.trailer-play');
+    const video = trailer?.querySelector<HTMLVideoElement>('video');
+    const status = document.querySelector<HTMLElement>('.video-status');
+    let loadTimeout: ReturnType<typeof setTimeout>;
+    function failed() { clearTimeout(loadTimeout); if (status) status.textContent = trailer?.dataset.error || ''; }
+    play?.addEventListener('click', async () => {
+      if (!video || !trailer?.dataset.hls) return;
+      play.hidden = true;
+      video.hidden = false;
+      loadTimeout = setTimeout(failed, 20000);
+      video.addEventListener('loadeddata', () => { clearTimeout(loadTimeout); if (status) status.textContent = ''; }, { once: true });
+      video.addEventListener('error', failed, { once: true });
+      try {
+        if (video.canPlayType('application/vnd.apple.mpegurl')) {
+          video.src = trailer.dataset.hls;
+          await video.play().catch(() => {});
+        } else {
+          const { default: Hls } = await import('hls.js/dist/hls.light.mjs');
+          if (!Hls.isSupported()) { failed(); return; }
+          const hls = new Hls({ maxBufferLength: 30 });
+          hls.loadSource(trailer.dataset.hls);
+          hls.attachMedia(video);
+          hls.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(() => {}));
+          hls.on(Hls.Events.ERROR, (_event, data) => { if (data.fatal) { hls.destroy(); failed(); } });
+          window.addEventListener('pagehide', () => hls.destroy(), { once: true });
+        }
+      } catch { failed(); }
+    });
+    const dialog = document.querySelector<HTMLDialogElement>('.lightbox');
+    const large = dialog?.querySelector<HTMLImageElement>('img');
+    const caption = dialog?.querySelector<HTMLElement>('p');
+    let returnTo: HTMLAnchorElement | null = null;
+    document.querySelectorAll<HTMLAnchorElement>('[data-gallery]').forEach(link => link.addEventListener('click', event => {
+      if (!dialog || !large || !caption) return;
+      event.preventDefault(); returnTo = link;
+      large.src = link.href; large.alt = link.querySelector('img')?.alt || ''; caption.textContent = large.alt;
+      dialog.showModal(); document.body.classList.add('dialog-open');
+    }));
+    dialog?.querySelector('button')?.addEventListener('click', () => dialog.close());
+    dialog?.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+    dialog?.addEventListener('close', () => { document.body.classList.remove('dialog-open'); returnTo?.focus(); });
+  </script>
+</Layout>

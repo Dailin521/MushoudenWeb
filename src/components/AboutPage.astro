@@ -1,0 +1,14 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { asset, copy, url, type Locale } from '../lib/site';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = copy[locale];
+---
+<Layout locale={locale} title={t.nav[2]} section="about" pathname="about">
+  <div class="container about-container">
+    <header class="editorial-header"><span class="eyebrow">{t.aboutSub}</span><h1>{t.aboutTitle}</h1><p>{t.tagline}</p></header>
+    <figure class="about-image"><img src={asset("/media/game/strategy.webp")} alt={locale === 'zh' ? '猛将三国：两位谋士围绕沙盘筹划' : 'Two strategists studying a campaign map in Mushouden'} width="1600" height="900" fetchpriority="high" /><figcaption>{locale === 'zh' ? '《猛将三国》游戏美术' : 'Artwork from Three Kingdoms: Mushouden'}</figcaption></figure>
+    <div class="about-story"><span class="eyebrow">{locale === 'zh' ? '关于我们' : 'OUR STUDIO'}</span><div><h2>{locale === 'zh' ? '一个世界，许多种可能。' : 'One world. Many possibilities.'}</h2><p>{t.aboutBody}</p><p>{t.aboutBody2}</p><div class="inline-links"><a class="text-link" href={url(locale, 'games')}>{t.footerGame} ↗</a><a class="text-link" href={url(locale, 'community')}>{t.community} ↗</a></div></div></div>
+  </div>
+</Layout>

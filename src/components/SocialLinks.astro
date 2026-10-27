@@ -1,0 +1,25 @@
+---
+import { site, steamUrl, type Locale } from '../lib/site';
+import { icons } from '../data/social-icons.json';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const links = [
+  { icon: 'qq' as const, label: locale === 'zh' ? 'QQ · 玩家交流群 1' : 'QQ · Player group 1', href: site.qqGroupLinks[site.groups[0]] },
+  { icon: 'bilibili' as const, label: locale === 'zh' ? '哔哩哔哩' : 'Bilibili', href: site.bilibili },
+  { icon: 'douyin' as const, label: locale === 'zh' ? '抖音' : 'Douyin', href: site.douyin },
+  { icon: 'xiaohongshu' as const, label: locale === 'zh' ? '小红书' : 'Xiaohongshu', href: site.xiaohongshu },
+  { icon: 'discord' as const, label: 'Discord', href: site.discord },
+  { icon: 'x' as const, label: 'X', href: site.x },
+  { icon: 'steam' as const, label: 'Steam', href: steamUrl(locale) },
+];
+---
+<nav class="header-social" aria-label={locale === 'zh' ? '官方平台' : 'Official channels'}>
+  {links.map(link => (
+    <a class="social-icon-link" href={link.href} target="_blank" rel="noopener noreferrer" aria-label={link.label} title={link.label}>
+      <svg class:list={['social-icon', { 'social-icon-wide': link.icon === 'xiaohongshu' }]} xmlns="http://www.w3.org/2000/svg" viewBox={icons[link.icon].viewBox} aria-hidden="true" focusable="false">
+        <path d={icons[link.icon].path} />
+      </svg>
+    </a>
+  ))}
+</nav>

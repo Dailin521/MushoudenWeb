@@ -1,0 +1,37 @@
+{
+  "screenshots": [
+    {
+      "full": "/media/game/screenshot-1.webp",
+      "thumb": "/media/game/screenshot-1-thumb.webp"
+    },
+    {
+      "full": "/media/game/screenshot-2.webp",
+      "thumb": "/media/game/screenshot-2-thumb.webp"
+    },
+    {
+      "full": "/media/game/screenshot-3.webp",
+      "thumb": "/media/game/screenshot-3-thumb.webp"
+    },
+    {
+      "full": "/media/game/screenshot-4.webp",
+      "thumb": "/media/game/screenshot-4-thumb.webp"
+    },
+    {
+      "full": "/media/game/screenshot-5.webp",
+      "thumb": "/media/game/screenshot-5-thumb.webp"
+    },
+    {
+      "full": "/media/game/screenshot-6.webp",
+      "thumb": "/media/game/screenshot-6-thumb.webp"
+    }
+  ],
+  "trailer": {
+    "poster": "/media/game/trailer.webp",
+    "hls": "https://video.akamai.steamstatic.com/store_trailers/3285500/1150097213/04503b37e68436a0f749d544d2363f0599537031/1750825303/hls_264_master.m3u8?t=1750063644",
+    "source": "https://store.steampowered.com/app/3285500/"
+  },
+  "headers": {
+    "zh": "/media/game/steam-zh.webp",
+    "en": "/media/game/steam-en.webp"
+  }
+}

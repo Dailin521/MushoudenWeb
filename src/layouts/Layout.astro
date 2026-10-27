@@ -1,0 +1,88 @@
+---
+import '../styles/global.css';
+import SocialLinks from '../components/SocialLinks.astro';
+import { asset, copy, site, url, steamUrl, type Locale } from '../lib/site';
+interface Props { locale: Locale; title?: string; description?: string; section?: string; pathname?: string; image?: string; article?: boolean; noIndex?: boolean }
+const { locale, title, description, section = 'news', pathname = '', image = '/media/game/steam-zh.webp', article = false, noIndex = false } = Astro.props;
+const t = copy[locale];
+const otherLocale = locale === 'zh' ? 'en' : 'zh';
+const paths = ['', 'games', 'about', 'community'];
+const sections = ['news', 'games', 'about', 'community'];
+const fullTitle = title ? `${title} — ${t.studio}` : `${t.studio} · ${locale === 'zh' ? '猛将三国' : 'Three Kingdoms: Mushouden'}`;
+const canonical = Astro.site && !noIndex ? new URL(url(locale, pathname), Astro.site).href : undefined;
+const absoluteImage = Astro.site ? new URL(asset(image), Astro.site).href : asset(image);
+---
+<!doctype html>
+<html lang={locale === 'zh' ? 'zh-CN' : 'en'}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description || t.description} />
+    <meta name="theme-color" content="#c72d40" />
+    {noIndex && <meta name="robots" content="noindex" />}
+    <title>{fullTitle}</title>
+    <link rel="icon" type="image/svg+xml" href={asset("/favicon.svg")} />
+    {canonical && <link rel="canonical" href={canonical} />}
+    {!noIndex && (['zh', 'en'] as Locale[]).map(lang => <link rel="alternate" hreflang={lang === 'zh' ? 'zh-CN' : 'en'} href={Astro.site ? new URL(url(lang, pathname), Astro.site).href : url(lang, pathname)} />)}
+    <meta property="og:type" content={article ? 'article' : 'website'} />
+    <meta property="og:site_name" content={t.studio} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description || t.description} />
+    <meta property="og:image" content={absoluteImage} />
+    <meta property="og:locale" content={locale === 'zh' ? 'zh_CN' : 'en_US'} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{t.skip}</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="wordmark" href={url(locale)} aria-label={t.studio}>
+          <span class="wordmark-name">{site.name}</span>
+        </a>
+        <button class="menu-toggle" aria-label={t.menu} aria-expanded="false" aria-controls="main-nav"><span></span><span></span><span></span></button>
+        <nav id="main-nav" class="main-nav" aria-label={locale === 'zh' ? '主导航' : 'Main navigation'}>
+          {t.nav.map((label, i) => <a class:list={{ active: section === sections[i] }} aria-current={section === sections[i] ? 'page' : undefined} href={url(locale, paths[i])}>{label}</a>)}
+          <span class="nav-divider" aria-hidden="true"></span>
+          <a class="language-switch" href={url(otherLocale, noIndex ? '' : pathname)} lang={otherLocale === 'zh' ? 'zh-CN' : 'en'} aria-label={locale === 'zh' ? 'Switch to English' : '切换为简体中文'}>{locale === 'zh' ? 'EN' : '中文'}<span aria-hidden="true"> ↗</span></a>
+        </nav>
+        <SocialLinks locale={locale} />
+      </div>
+    </header>
+    <main id="main" tabindex="-1"><slot /></main>
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-about">
+          <a class="footer-brand" href={url(locale)}>{site.name}</a>
+          <p>{t.studioIntro}</p>
+        </div>
+        <div class="footer-links"><span class="eyebrow">{locale === 'zh' ? '在这里继续探索' : 'KEEP EXPLORING'}</span>
+          <a href={url(locale, 'games')}>{t.footerGame} <span aria-hidden="true">↗</span></a>
+          <a href={url(locale, 'community')}>{t.footerCommunity} <span aria-hidden="true">↗</span></a>
+          <a href={steamUrl(locale)} target="_blank" rel="noopener noreferrer">Steam <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="footer-social"><span class="eyebrow">{t.follow}</span>
+          <a href={site.bilibili} target="_blank" rel="noopener noreferrer">{locale === 'zh' ? '哔哩哔哩' : 'Bilibili'} ↗</a>
+          <a href={site.douyin} target="_blank" rel="noopener noreferrer">{locale === 'zh' ? '抖音' : 'Douyin'} ↗</a>
+          <a href={site.xiaohongshu} target="_blank" rel="noopener noreferrer">{locale === 'zh' ? '小红书' : 'Xiaohongshu'} ↗</a>
+          <a href={site.discord} target="_blank" rel="noopener noreferrer">Discord ↗</a>
+          <a href={site.x} target="_blank" rel="noopener noreferrer">X ↗</a>
+        </div>
+      </div>
+      <div class="footer-bottom"><span>© {new Date().getFullYear()} {t.copyright}</span><span>{t.tagline}</span></div>
+    </footer>
+    <script>
+      const menu = document.querySelector<HTMLButtonElement>('.menu-toggle');
+      const nav = document.querySelector<HTMLElement>('#main-nav');
+      function closeMenu() { menu?.setAttribute('aria-expanded', 'false'); nav?.classList.remove('is-open'); }
+      menu?.addEventListener('click', () => { const open = menu.getAttribute('aria-expanded') !== 'true'; menu.setAttribute('aria-expanded', String(open)); nav?.classList.toggle('is-open', open); });
+      document.addEventListener('keydown', event => { if (event.key === 'Escape' && menu?.getAttribute('aria-expanded') === 'true') { closeMenu(); menu.focus(); } });
+      nav?.addEventListener('click', event => { if ((event.target as HTMLElement).closest('a')) closeMenu(); });
+      document.querySelectorAll<HTMLImageElement>('img').forEach(img => {
+        const fallback = () => { if (!img.src.endsWith('/media/game/strategy.webp')) { img.srcset = ''; img.src = '/media/game/strategy.webp'; } };
+        img.addEventListener('error', fallback, { once: true });
+        if (img.complete && img.naturalWidth === 0) fallback();
+      });
+    </script>
+  </body>
+</html>

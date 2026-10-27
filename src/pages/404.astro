@@ -1,0 +1,5 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { copy, url } from '../lib/site';
+---
+<Layout locale="zh" title="404" section="" noIndex><div class="container not-found"><span class="eyebrow">404 / PAGE NOT FOUND</span><h1>{copy.zh.notFound}</h1><p>{copy.zh.notFoundBody}</p><a class="button" href={url("zh")}>{copy.zh.home} ↗</a><p lang="en">{copy.en.notFoundBody} <a href={url("en")}>{copy.en.home}</a></p></div></Layout>

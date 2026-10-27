@@ -1,0 +1,78 @@
+[
+  {
+    "file": "/media/game/zhaoyun.webp",
+    "source": "E:\\rich\\Mushouden\\Code\\Mushouden\\Assets\\Res\\切图\\CG\\CGzhaoyun.jpg"
+  },
+  {
+    "file": "/media/game/duel.webp",
+    "source": "E:\\rich\\Mushouden\\Code\\Mushouden\\Assets\\Res\\切图\\CG\\CG3.jpg"
+  },
+  {
+    "file": "/media/game/strategy.webp",
+    "source": "E:\\rich\\Mushouden\\Code\\Mushouden\\Assets\\Res\\切图\\CG\\CG2.png"
+  },
+  {
+    "file": "/media/game/logo-en.webp",
+    "source": "E:\\rich\\Mushouden\\Code\\Mushouden\\Assets\\Res\\切图\\CG\\logo_猛将_en.png"
+  },
+  {
+    "file": "/media/game/steam-zh.webp",
+    "source": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3285500/2f5e0311c19c22ce363c068af6e0bbb6afd03008/header_schinese.jpg?t=1766667910"
+  },
+  {
+    "file": "/media/game/screenshot-1.webp",
+    "source": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3285500/ss_4ed64511ff00c9a64854a893f2fc4d7c982e4a2d.1920x1080.jpg?t=1766667910"
+  },
+  {
+    "file": "/media/game/screenshot-1-thumb.webp",
+    "source": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3285500/ss_4ed64511ff00c9a64854a893f2fc4d7c982e4a2d.1920x1080.jpg?t=1766667910"
+  },
+  {
+    "file": "/media/game/screenshot-2.webp",
+    "source": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3285500/98dd339e93a77c34cdf447415ad56d4f0ee43e02/ss_98dd339e93a77c34cdf447415ad56d4f0ee43e02.1920x1080.jpg?t=1766667910"
+  },
+  {
+    "file": "/media/game/screenshot-2-thumb.webp",
+    "source": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3285500/98dd339e93a77c34cdf447415ad56d4f0ee43e02/ss_98dd339e93a77c34cdf447415ad56d4f0ee43e02.1920x1080.jpg?t=1766667910"
+  },
+  {
+    "file": "/media/game/screenshot-3.webp",
+    "source": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3285500/4d7b7a329e0621af2c14e7f18c7eac7c529d0ef1/ss_4d7b7a329e0621af2c14e7f18c7eac7c529d0ef1.1920x1080.jpg?t=1766667910"
+  },
+  {
+    "file": "/media/game/screenshot-3-thumb.webp",
+    "source": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3285500/4d7b7a329e0621af2c14e7f18c7eac7c529d0ef1/ss_4d7b7a329e0621af2c14e7f18c7eac7c529d0ef1.1920x1080.jpg?t=1766667910"
+  },
+  {
+    "file": "/media/game/screenshot-4.webp",
+    "source": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3285500/ss_a041bc2daecdb51fc7fa775d2859bafc3b978cd6.1920x1080.jpg?t=1766667910"
+  },
+  {
+    "file": "/media/game/screenshot-4-thumb.webp",
+    "source": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3285500/ss_a041bc2daecdb51fc7fa775d2859bafc3b978cd6.1920x1080.jpg?t=1766667910"
+  },
+  {
+    "file": "/media/game/screenshot-5.webp",
+    "source": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3285500/ef454f304e263cde4e034cb3d1dcf79b1fb7baae/ss_ef454f304e263cde4e034cb3d1dcf79b1fb7baae.1920x1080.jpg?t=1766667910"
+  },
+  {
+    "file": "/media/game/screenshot-5-thumb.webp",
+    "source": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3285500/ef454f304e263cde4e034cb3d1dcf79b1fb7baae/ss_ef454f304e263cde4e034cb3d1dcf79b1fb7baae.1920x1080.jpg?t=1766667910"
+  },
+  {
+    "file": "/media/game/screenshot-6.webp",
+    "source": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3285500/d9aded6a82b1221522343eed630ffc4ac2aecccd/ss_d9aded6a82b1221522343eed630ffc4ac2aecccd.1920x1080.jpg?t=1766667910"
+  },
+  {
+    "file": "/media/game/screenshot-6-thumb.webp",
+    "source": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3285500/d9aded6a82b1221522343eed630ffc4ac2aecccd/ss_d9aded6a82b1221522343eed630ffc4ac2aecccd.1920x1080.jpg?t=1766667910"
+  },
+  {
+    "file": "/media/game/trailer.webp",
+    "source": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/257157306/59021b3eb813fc68f570c1d4770b7eebfead3dc8/movie_600x337.jpg?t=1750063644"
+  },
+  {
+    "file": "/media/game/steam-en.webp",
+    "source": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3285500/52f812ad23e8c33ac7fe4423309602ac3c993c44/header.jpg?t=1766667910"
+  }
+]

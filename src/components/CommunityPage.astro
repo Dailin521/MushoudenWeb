@@ -1,0 +1,51 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { copy, site, type Locale } from '../lib/site';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = copy[locale];
+---
+<Layout locale={locale} title={t.nav[3]} section="community" pathname="community">
+  <div class="container community-container">
+    <header class="editorial-header"><span class="eyebrow">{locale === 'zh' ? 'COMMUNITY & CONTACT' : 'COME SAY HELLO'}</span><h1>{t.communityTitle}</h1><p>{t.communityIntro}</p></header>
+    <section class="qq-section">
+      <div class="section-heading"><h2>{t.qq}</h2><span class="eyebrow">QQ COMMUNITY</span></div>
+      <div class="group-grid">{site.groups.map((number, index) => <article class="group">
+        <span class="group-index">0{index + 1}</span><h3>{t.groupNames[index]}</h3><p>{t.groupDescriptions[index]}</p>
+        <div class="group-number">
+          <p class="copy-value">{number}</p>
+          <button class="copy-button" data-copy={number} data-success={t.copied} data-failure={t.copyFailed} aria-label={`${t.copyNumber} ${number}`}>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><rect x="8" y="8" width="12" height="12" rx="2" /><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3" /></svg>
+          </button>
+        </div>
+        {site.qqGroupLinks[number] && <a class="button group-join" href={site.qqGroupLinks[number]} target="_blank" rel="noopener noreferrer">{t.joinGroup} ↗</a>}
+        <p class="copy-status" role="status"></p>
+      </article>)}</div>
+    </section>
+    <section id="social" class="social-section"><div class="section-heading"><h2>{t.social}</h2></div><div class="social-list">
+      <a class="social-row" href={site.bilibili} target="_blank" rel="noopener noreferrer"><span class="social-platform">{locale === 'zh' ? '哔哩哔哩' : 'Bilibili'}</span><span>{t.bilibiliDescription}</span><span class="social-arrow" aria-hidden="true">↗</span></a>
+      <a class="social-row" href={site.douyin} target="_blank" rel="noopener noreferrer"><span class="social-platform">{locale === 'zh' ? '抖音' : 'Douyin'}</span><span>猛将三国</span><span class="social-arrow" aria-hidden="true">↗</span></a>
+      <a class="social-row" href={site.xiaohongshu} target="_blank" rel="noopener noreferrer"><span class="social-platform">{locale === 'zh' ? '小红书' : 'Xiaohongshu'}</span><span>猛将三国</span><span class="social-arrow" aria-hidden="true">↗</span></a>
+      <a class="social-row" href={site.discord} target="_blank" rel="noopener noreferrer"><span class="social-platform">Discord</span><span>Three Kingdoms Mushouden</span><span class="social-arrow" aria-hidden="true">↗</span></a>
+      <a class="social-row" href={site.x} target="_blank" rel="noopener noreferrer"><span class="social-platform">X</span><span>@Mushouden3</span><span class="social-arrow" aria-hidden="true">↗</span></a>
+    </div></section>
+  </div>
+  <script>
+    document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach(button => {
+      button.addEventListener('click', async () => {
+        const status = button.closest('.group')?.querySelector<HTMLElement>('.copy-status');
+        const value = button.dataset.copy || '';
+        if (!status) return;
+        try {
+          if (!navigator.clipboard) throw new Error('Clipboard unavailable');
+          await navigator.clipboard.writeText(value);
+          status.textContent = button.dataset.success || '';
+        } catch {
+          status.textContent = button.dataset.failure || '';
+          const visibleValue = button.closest('.group')?.querySelector('.copy-value');
+          if (visibleValue) { const range = document.createRange(); range.selectNodeContents(visibleValue); const selection = window.getSelection(); selection?.removeAllRanges(); selection?.addRange(range); }
+        }
+      });
+    });
+  </script>
+</Layout>

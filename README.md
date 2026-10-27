@@ -1,0 +1,85 @@
+# Team Platypus 官网
+
+《猛将三国》开发团队 Team Platypus 的中英文静态官网。采用 Astro + TypeScript，以 Team Cherry 官网的红白配色、图文交替新闻布局为参考。
+
+## 本地启动
+
+需要 Node.js **22.23.4 及以上**（本次使用 24.11.1）和 npm。
+
+```powershell
+cd E:\GitHubProject\MushoudenWeb
+npm ci
+npm run dev
+```
+
+默认地址：<http://127.0.0.1:4321/>。端口占用时以终端实际显示的地址为准。首次克隆已包含新闻快照及优化后的图片，不需要本地 Unity 工程也能运行。
+
+| 命令 | 用途 |
+| --- | --- |
+| `npm run dev` | 同步 Steam 公告，启动开发服务 |
+| `npm run sync:steam` | 手动刷新中英文公告及其图片 |
+| `npm run check` | Astro / TypeScript 检查 |
+| `npm test` | 新闻同步、清洗、缓存及失败回退测试 |
+| `npm run build` | 同步公告，生成静态站点到 `dist/` |
+| `npm run preview` | 本地预览生产构建 |
+| `npm run assets:prepare` | 重新导入游戏宣传素材，通常无需执行 |
+
+## 页面和内容维护
+
+中文首页 `/`，英文首页 `/en/`。两种语言均包含 `games/`、`about/`、`community/`、`news/<事件ID>/` 和 `news/page/<页码>/`。每页 5 条新闻，语言切换保留文章 ID 和页码。
+
+- 品牌、文案、社交平台和 QQ 群：`src/lib/site.ts`。
+- 公共布局和样式：`src/layouts/Layout.astro`、`src/styles/global.css`。
+- 页面主体：`src/components/`，中英文复用相同模板。
+- 新闻快照：`src/data/news.json`；游戏图片和预告片配置：`src/data/game.json`。
+- 正式域名：复制 `.env.example` 为 `.env`，填写 `SITE_URL`。配置后构建会生成绝对 canonical、语言和分享图片地址。未配置时不伪造生产域名。
+
+工作室使用 Team Platypus 文字标识。页头右侧提供 QQ、B站、抖音、小红书、Discord、X 和 Steam 图标直链，手机上始终可见。QQ 图标直达已验证的玩家交流群 1；小红书使用已验证可访问的干净主页地址，不携带搜索追踪参数。Discord 与 X 使用 Steam 商店页列出的官方链接，并同步展示在社区页和页脚。
+
+QQ 群链接维护在 `src/lib/site.ts` 的 `site.qqGroupLinks`，键为群号，值为从 QQ 群资料中复制的真实 HTTPS 分享链接。配置后显示“加入群聊”主按钮，群号旁保留复制图标。腾讯当前[官方加群组件](https://qun.qq.com/join.html)通过登录后的接口生成专属签名；不能仅将群号拼入 URL 代替分享链接。此配置说明只面向网站维护者，不显示给玩家。页面不展示点击、复制或加群操作教程。
+
+## Steam 新闻同步
+
+只在 Node 构建/同步阶段请求 Steam，浏览器直接读取已生成的静态页面和本地图片。
+
+- 中文：<https://store.steampowered.com/feeds/news/app/3285500/?l=schinese>
+- 英文：<https://store.steampowered.com/feeds/news/app/3285500/?l=english>
+- 游戏：<https://store.steampowered.com/app/3285500/>
+
+使用新闻 URL 末尾事件 ID 合并双语，不使用另一套 `ISteamNews` 公告 GID。当前 RSS 每种语言提供最近 10 篇；同步更新同 ID 的内容，并保留退出 RSS 的既有文章。因此请将 `src/data/news.json` 和 `public/media/news/` 一并保存到版本库，累计历史依赖这些快照。
+
+单个语种请求失败时保留该语种旧内容；两个源均失败但已有可用快照时，命令打印警告并继续。没有快照且两个源均失败时退出报错。已有快照损坏时直接报错并保留原文件，避免覆盖历史。请求有超时、重试和体积限制。
+
+远端 HTML 只保留经过清洗的基础内容。新闻图片仅允许来自 Steam CDN，下载并压缩为最大边 1600px 的 WebP；动图保留全部帧、帧时长及循环信息。轮播转为普通图片。正文图片缺失时使用本地游戏 CG；没有封面的更新日志使用 `public/media/news/fix.svg`。图片来源记录在 `public/media/news/sources.json`。
+
+`public/media/news/cache-versions.json` 记录图片处理版本。同步会刷新旧版本的缓存（包含已退出 RSS 的历史图片），成功后原子替换；刷新失败继续使用原有图片，下次重试。请将此文件与图片一并保存到版本库。
+
+官方两种语言公告可能内容不同，本站分别保留来源文本，不做自动机器翻译。若一个事件缺少某语种，则显示可用原文并标注语言。官方英文 RSS 本身偶尔含中文标题，本站保留官方标题。
+
+## 素材
+
+- 项目美术来源：`E:\rich\Mushouden\Code\Mushouden\Assets\Res\切图\CG`。使用赵云、沙盘及交锋 CG，读取来源文件后在网站内生成 WebP。
+- 实机截图、当前商店宣传图和预告片来自 Steam 商店公开素材。只使用公开截图，不使用含占位文字的设计稿。
+- 网站图片：`public/media/game/`，逐项来源见该目录的 `sources.json`。
+- 平台图标：`src/data/social-icons.json` 保存 Simple Icons 的 SVG 路径及来源，采用 CC0-1.0 许可；抖音使用与 TikTok 共用的音符标识。图标随 HTML 内联输出，无第三方字体或运行时图标请求。
+- 重新导入时可设置 `MUSHOUDEN_ASSET_ROOT` 指向对应 CG 目录，再运行 `npm run assets:prepare`；该命令需要来源文件和网络，不会修改游戏工程。
+- 游戏预告片使用 Steam 官方 HLS。只有点击播放时才下载播放器与视频，失败时保留前往 Steam 的入口。预告片源变更后可重新导入素材更新配置。
+
+游戏及工作室美术、商标和公告归各自权利人所有；仓库未为这些素材授予额外许可。
+
+## 验证与 GitHub Pages 部署
+
+```powershell
+npm run check
+npm test
+npm run build
+npm run preview
+```
+
+预览地址：<https://dailin521.github.io/MushoudenWeb/>，英文版：<https://dailin521.github.io/MushoudenWeb/en/>。
+
+`.github/workflows/deploy.yml` 在推送 `main` 或手动触发时执行检查、测试、构建，再发布 `dist/` 到 GitHub Pages。仓库 Settings → Pages 的 Source 使用 GitHub Actions。构建设置 `SITE_URL=https://dailin521.github.io`、`BASE_PATH=/MushoudenWeb`；导航、图片、新闻正文与分享链接均支持该子路径。本地不设置这些变量时仍使用根路径。部署到独立域名时修改 SITE_URL，并去掉 BASE_PATH。
+
+Steam 新闻在本地启动与每次部署构建前同步。需要更新线上新闻时，可在 GitHub Actions 手动运行部署；历史快照仍应通过本地同步后提交 `src/data/news.json` 与 `public/media/news/` 来持久保存。网站没有依赖在线 CMS、数据库或登录后台。
+
+本地验收截图保存在忽略目录 `output/playwright/`，新闻与素材源文件保存在仓库中。

@@ -1,0 +1,32 @@
+{
+  "name": "team-platypus",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.23.4"
+  },
+  "scripts": {
+    "predev": "npm run sync:steam",
+    "dev": "astro dev --host 127.0.0.1",
+    "prebuild": "npm run sync:steam",
+    "build": "astro build",
+    "preview": "astro preview --host 127.0.0.1",
+    "sync:steam": "node scripts/sync-steam.mjs",
+    "check": "astro check",
+    "test": "node --test tests/*.test.mjs",
+    "assets:prepare": "node scripts/prepare-assets.mjs"
+  },
+  "dependencies": {
+    "astro": "7.4.2",
+    "fast-xml-parser": "^5.3.0",
+    "fast-xml-validator": "^1.4.2",
+    "hls.js": "^1.6.13",
+    "sanitize-html": "^2.17.0",
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.6",
+    "typescript": "^5.9.3"
+  }
+}

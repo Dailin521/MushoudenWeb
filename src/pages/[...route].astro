@@ -1,0 +1,18 @@
+---
+import NewsList from '../components/NewsList.astro';
+import NewsArticle from '../components/NewsArticle.astro';
+import { news, totalPages, type NewsEntry } from '../lib/news';
+import { locales, type Locale } from '../lib/site';
+export function getStaticPaths() {
+  return locales.flatMap(locale => {
+    const prefix = locale === 'en' ? 'en/' : '';
+    return [
+      ...news.map(entry => ({ params: { route: `${prefix}news/${entry.id}` }, props: { locale, entry, page: 0 } })),
+      ...Array.from({ length: totalPages - 1 }, (_, index) => ({ params: { route: `${prefix}news/page/${index + 2}` }, props: { locale, entry: null, page: index + 2 } })),
+    ];
+  });
+}
+interface Props { locale: Locale; entry: NewsEntry | null; page: number }
+const { locale, entry, page } = Astro.props;
+---
+{entry ? <NewsArticle locale={locale} entry={entry} /> : <NewsList locale={locale} page={page} />}
