@@ -14,13 +14,19 @@ const pagePath = (n: number) => n === 1 ? '' : `news/page/${n}`;
     <div class="news-list">
       {entries.map((entry, index) => {
         const { content, isFallback, actualLocale } = newsContent(entry, locale);
-        return <article class:list={['news-row', { reverse: index % 2 === 1 }]}>
-          <a class:list={['news-cover', { 'patch-cover': content.cover === '/media/news/fix.svg' }]} href={url(locale, `news/${entry.id}`)} tabindex="-1" aria-hidden="true">
+        const isPatch = content.cover === '/media/news/fix.svg';
+        return <article class:list={['news-row', { reverse: !isPatch && index % 2 === 1, 'patch-news': isPatch }]}>
+          {!isPatch && <a class="news-cover" href={url(locale, `news/${entry.id}`)} tabindex="-1" aria-hidden="true">
             <img src={asset(content.cover || '/media/game/strategy.webp')} alt="" width="800" height="540" loading={index === 0 ? 'eager' : 'lazy'} fetchpriority={index === 0 ? 'high' : 'auto'} />
-          </a>
+          </a>}
           <div class="news-text" lang={actualLocale === 'zh' ? 'zh-CN' : 'en'}>
-            <time datetime={entry.publishedAt}>{dateLabel(entry.publishedAt, locale)}</time>
-            <h2><a href={url(locale, `news/${entry.id}`)}>{content.title}</a></h2>
+            <div class:list={{ 'patch-heading': isPatch }}>
+              {isPatch && <img class="repair-icon" src={asset(content.cover)} alt="" aria-hidden="true" width="56" height="56" loading="lazy" />}
+              <div>
+                <time datetime={entry.publishedAt}>{dateLabel(entry.publishedAt, locale)}</time>
+                <h2><a href={url(locale, `news/${entry.id}`)}>{content.title}</a></h2>
+              </div>
+            </div>
             {isFallback && <p class="language-note">{t.fallback}</p>}
             <p class="news-summary">{content.summary}</p>
             <a class="text-link" href={url(locale, `news/${entry.id}`)}>{t.read}<span aria-hidden="true">↗</span><span class="sr-only"> — {content.title}</span></a>

@@ -7,13 +7,17 @@ const { locale, entry } = Astro.props;
 const t = copy[locale];
 const { content, isFallback, actualLocale } = newsContent(entry, locale);
 const coverIsInBody = content.bodyHtml.includes(`src="${content.cover}"`);
+const isPatch = content.cover === '/media/news/fix.svg';
 ---
 <Layout locale={locale} title={content.title} description={content.summary} image={content.cover} pathname={`news/${entry.id}`} article>
   <article class="article-container">
     <a class="back-link" href={url(locale)}>← {t.back}</a>
-    <header class="article-header"><time datetime={entry.publishedAt}>{dateLabel(entry.publishedAt, locale)}</time><h1>{content.title}</h1></header>
+    <header class:list={['article-header', { 'patch-heading': isPatch }]}>
+      {isPatch && <img class="repair-icon" src={asset(content.cover)} alt="" aria-hidden="true" width="56" height="56" />}
+      <div><time datetime={entry.publishedAt}>{dateLabel(entry.publishedAt, locale)}</time><h1>{content.title}</h1></div>
+    </header>
     {isFallback && <p class="language-note">{t.fallback}</p>}
-    {!coverIsInBody && <img class:list={['article-cover', { 'patch-cover': content.cover === '/media/news/fix.svg' }]} src={asset(content.cover || '/media/game/strategy.webp')} alt={content.title} width="1200" height="800" fetchpriority="high" />}
+    {!isPatch && !coverIsInBody && <img class="article-cover" src={asset(content.cover || '/media/game/strategy.webp')} alt={content.title} width="1200" height="800" fetchpriority="high" />}
     <div class="prose" lang={actualLocale === 'zh' ? 'zh-CN' : 'en'} set:html={content.bodyHtml.replace(/(\b(?:src|href)=")\/(?!\/)/g, `$1${asset('/')}`)} />
     <div class="article-end"><a class="text-link" href={`${entry.sourceUrl}?l=${locale === 'zh' ? 'schinese' : 'english'}`} target="_blank" rel="noopener noreferrer">{t.source} ↗</a><a href={url(locale)}>← {t.back}</a></div>
   </article>
