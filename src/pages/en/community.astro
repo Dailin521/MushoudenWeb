@@ -1,4 +1,4 @@
 ---
-import CommunityPage from '../../components/CommunityPage.astro';
+import { url } from '../../lib/site';
+return Astro.redirect(url('en', 'contact'), 301);
 ---
-<CommunityPage locale="en" />

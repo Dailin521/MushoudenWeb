@@ -1,0 +1,19 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { copy, site, type Locale } from '../lib/site';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = copy[locale];
+---
+<Layout locale={locale} title={t.contactTitle} section="contact" pathname="contact">
+  <div class="container contact-container">
+    <header class="contact-heading">
+      <h1>{t.contactTitle}</h1>
+      <p>{t.operatedBy}</p>
+    </header>
+    <div class="contact-details">
+      <span class="eyebrow">{t.email}</span>
+      <a class="contact-email" href={`mailto:${site.email}`}>{site.email}</a>
+    </div>
+  </div>
+</Layout>

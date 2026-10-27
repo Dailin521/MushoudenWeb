@@ -26,17 +26,15 @@ npm run dev
 
 ## 页面和内容维护
 
-中文首页 `/`，英文首页 `/en/`。两种语言均包含 `games/`、`about/`、`community/`、`news/<事件ID>/` 和 `news/page/<页码>/`。每页 5 条新闻，语言切换保留文章 ID 和页码。
+中文首页 `/`，英文首页 `/en/`。两种语言均包含 `games/`、`about/`、`contact/`、`news/<事件ID>/` 和 `news/page/<页码>/`。原 `community/` 地址跳转至对应语言的 `contact/`，兼容根路径和 GitHub Pages 子路径。每页 5 条新闻，语言切换保留文章 ID 和页码。
 
-- 品牌、文案、社交平台和 QQ 群：`src/lib/site.ts`。
+- 品牌、文案、运营公司和联系邮箱：`src/lib/site.ts`。
 - 公共布局和样式：`src/layouts/Layout.astro`、`src/styles/global.css`。
 - 页面主体：`src/components/`，中英文复用相同模板。
 - 新闻快照：`src/data/news.json`；游戏图片和预告片配置：`src/data/game.json`。
 - 正式域名：复制 `.env.example` 为 `.env`，填写 `SITE_URL`。配置后构建会生成绝对 canonical、语言和分享图片地址。未配置时不伪造生产域名。
 
-工作室使用 Team Platypus 文字标识。页头右侧提供 QQ、B站、抖音、小红书、Discord、X 和 Steam 图标直链，手机上始终可见。QQ 图标直达已验证的玩家交流群 1；小红书使用已验证可访问的干净主页地址，不携带搜索追踪参数。Discord 与 X 使用 Steam 商店页列出的官方链接，并同步展示在社区页和页脚。
-
-QQ 群链接维护在 `src/lib/site.ts` 的 `site.qqGroupLinks`，键为群号，值为从 QQ 群资料中复制的真实 HTTPS 分享链接。配置后群名称成为加群链接，群列表右侧保留复制图标。社区页桌面展示 QQ 群列表和官方平台两个区域，手机上下排列。腾讯当前[官方加群组件](https://qun.qq.com/join.html)通过登录后的接口生成专属签名；不能仅将群号拼入 URL 代替分享链接。此配置说明只面向网站维护者，不显示给玩家。页面不展示点击、复制或加群操作教程。
+工作室使用 Team Platypus 文字标识，由**南京瑞奇网络科技有限公司**运营；关于页、联系页和页脚统一展示运营主体。联系方式仅保留 **13956648@qq.com**，通过 `mailto:` 链接打开邮件客户端。页头、联系页和页脚不展示社交平台、群号或加群入口。游戏购买和公告原文仍链接至 Steam，导入的历史公告保留官方原文。
 
 ## Steam 新闻同步
 
@@ -61,7 +59,6 @@ QQ 群链接维护在 `src/lib/site.ts` 的 `site.qqGroupLinks`，键为群号�
 - 项目美术来源：`E:\rich\Mushouden\Code\Mushouden\Assets\Res\切图\CG`。使用赵云、沙盘及交锋 CG，读取来源文件后在网站内生成 WebP。
 - 实机截图、当前商店宣传图和预告片来自 Steam 商店公开素材。只使用公开截图，不使用含占位文字的设计稿。
 - 网站图片：`public/media/game/`，逐项来源见该目录的 `sources.json`。
-- 平台图标：`src/data/social-icons.json` 保存 Simple Icons 的 SVG 路径及来源，采用 CC0-1.0 许可；抖音使用与 TikTok 共用的音符标识。图标随 HTML 内联输出，无第三方字体或运行时图标请求。
 - 重新导入时可设置 `MUSHOUDEN_ASSET_ROOT` 指向对应 CG 目录，再运行 `npm run assets:prepare`；该命令需要来源文件和网络，不会修改游戏工程。
 - 游戏预告片使用 Steam 官方 HLS。只有点击播放时才下载播放器与视频，失败时保留前往 Steam 的入口。预告片源变更后可重新导入素材更新配置。
 
