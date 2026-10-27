@@ -33,7 +33,7 @@
 @layer layout {
   .container { width: min(var(--max), calc(100% - var(--gutter) * 2)); margin-inline: auto; }
   .site-header { background: var(--red); color: #fff; }
-  .header-inner { width: min(1440px, calc(100% - var(--gutter) * 2)); min-height: 104px; margin-inline: auto; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: clamp(18px, 2vw, 32px); position: relative; }
+  .header-inner { width: min(1440px, calc(100% - var(--gutter) * 2)); min-height: 104px; margin-inline: auto; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: clamp(18px, 2vw, 32px); position: relative; }
   .wordmark { display: flex; flex-direction: column; flex-shrink: 0; line-height: 1; padding: 17px 0; color: #fff; }
   .wordmark:hover { color: #fff; opacity: .85; }
   .wordmark-name { font-size: 30px; font-weight: 750; letter-spacing: -.05em; white-space: nowrap; }
@@ -45,6 +45,8 @@
   .nav-divider { width: 1px; height: 20px; background: #ffffff50; }
   .main-nav .language-switch { font-size: 13px; font-weight: 600; gap: 10px; }
   .menu-toggle { display: none; }
+  .header-email { display: grid; place-items: center; width: 44px; height: 44px; color: white; }
+  .header-email:hover { color: white; opacity: .75; }
   .site-footer { margin-top: 100px; padding: 64px var(--gutter) 24px; background: var(--paper); border-top: 1px solid var(--line); }
   .footer-inner, .footer-bottom { max-width: var(--max); margin-inline: auto; }
   .footer-inner { display: grid; grid-template-columns: 1fr auto; gap: 64px; }
@@ -177,7 +179,8 @@
 @media (min-width: 1441px) { .news-row { gap: 100px; } }
 @media (max-width: 1000px) {
   .header-inner { min-height: 90px; }
-  .menu-toggle { grid-column: 2; grid-row: 1; justify-self: end; display: flex; flex-direction: column; justify-content: center; gap: 5px; width: 44px; height: 44px; background: none; border: none; padding: 10px; }
+  .header-email { grid-column: 2; grid-row: 1; justify-self: end; }
+  .menu-toggle { grid-column: 3; grid-row: 1; justify-self: end; display: flex; flex-direction: column; justify-content: center; gap: 5px; width: 44px; height: 44px; background: none; border: none; padding: 10px; }
   .menu-toggle span { height: 1px; width: 24px; background: white; transition: transform 180ms, opacity 180ms; }
   .menu-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
   .menu-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
@@ -256,7 +259,7 @@
   .contact-details { padding-top: 24px; }
 }
 @media (max-width: 660px) {
-  .header-inner { grid-template-columns: 1fr auto; column-gap: 16px; row-gap: 0; }
+  .header-inner { grid-template-columns: 1fr auto auto; column-gap: 12px; row-gap: 0; }
   .wordmark { min-height: 78px; justify-content: center; }
 }
 @media (prefers-reduced-motion: reduce) {

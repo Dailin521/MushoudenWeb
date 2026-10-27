@@ -45,6 +45,9 @@ const absoluteImage = Astro.site ? new URL(asset(image), Astro.site).href : asse
           <span class="nav-divider" aria-hidden="true"></span>
           <a class="language-switch" href={url(otherLocale, noIndex ? '' : pathname)} lang={otherLocale === 'zh' ? 'zh-CN' : 'en'} aria-label={locale === 'zh' ? 'Switch to English' : '切换为简体中文'}>{locale === 'zh' ? 'EN' : '中文'}<span aria-hidden="true"> ↗</span></a>
         </nav>
+        <a class="header-email" href={`mailto:${site.email}`} aria-label={`${t.email}: ${site.email}`} title={`${t.email}: ${site.email}`}>
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg>
+        </a>
       </div>
     </header>
     <main id="main" tabindex="-1"><slot /></main>
