@@ -154,16 +154,18 @@
   .lightbox img { max-height: 76dvh; object-fit: contain; margin-inline: auto; }
   .lightbox-close { position: absolute; right: 8px; top: 4px; width: 44px; height: 44px; padding: 0; border: 0; color: white; background: none; font-size: 32px; }
   .lightbox-caption { margin-top: 12px; text-align: center; font-size: 13px; color: #d7ccce; }
-  .editorial-header { padding: 68px 0 52px; }
-  .editorial-header h1 { font-size: clamp(30px, 4vw, 52px); margin: 16px 0 22px; font-weight: 500; }
-  .editorial-header > p { max-width: 720px; color: var(--muted); font-size: 16px; }
-  .about-image > img { width: 100%; aspect-ratio: 2.2; object-fit: cover; }
-  .about-image figcaption { font-size: 11px; color: var(--muted); margin-top: 12px; text-align: right; }
-  .about-story { display: grid; grid-template-columns: 1fr 2fr; gap: 50px; padding-top: 65px; }
-  .about-story > .eyebrow { margin-top: 10px; }
-  .about-story h2 { color: var(--red-dark); font-size: 32px; margin-bottom: 26px; }
-  .about-story p { margin-bottom: 24px; max-width: 740px; }
-  .inline-links { display: flex; flex-wrap: wrap; gap: 32px; margin-top: 30px; }
+  .about-header { display: grid; grid-template-columns: 1.2fr 1fr; align-items: end; gap: 64px; padding: 64px 0 48px; }
+  .about-header h1 { color: var(--red-dark); font-size: clamp(40px, 4.2vw, 60px); font-weight: 650; line-height: 1.15; letter-spacing: -.045em; margin: 14px 0 20px; }
+  .about-intro { font-size: 20px; line-height: 1.65; }
+  .about-operator p { max-width: 440px; color: var(--muted); font-size: 16px; }
+  .about-operator .text-link { margin-top: 16px; }
+  .about-work { display: grid; grid-template-columns: 1.2fr 1fr; align-items: center; gap: 64px; border-top: 1px solid var(--line); padding-top: 48px; }
+  .about-image > img { width: 100%; height: auto; }
+  .about-image figcaption { font-size: 12px; color: var(--muted); margin-top: 10px; }
+  .about-work-copy h2 { color: var(--red-dark); font-size: clamp(28px, 2.5vw, 34px); margin: 12px 0 20px; line-height: 1.35; }
+  .about-work-copy > p { font-size: 16px; line-height: 1.9; }
+  .about-work-copy .about-release { color: var(--muted); font-size: 13px; margin-top: 20px; }
+  .about-work-copy .text-link { margin-top: 16px; }
   .contact-container { max-width: 1120px; }
   .contact-heading { padding: 64px 0 36px; }
   .contact-heading h1 { color: var(--red-dark); font-size: clamp(36px, 4vw, 50px); font-weight: 550; }
@@ -178,6 +180,7 @@
 
 @media (min-width: 1441px) { .news-row { gap: 100px; } }
 @media (max-width: 1000px) {
+  .about-header, .about-work { gap: 36px; }
   .header-inner { min-height: 90px; }
   .header-email { grid-column: 2; grid-row: 1; justify-self: end; }
   .menu-toggle { grid-column: 3; grid-row: 1; justify-self: end; display: flex; flex-direction: column; justify-content: center; gap: 5px; width: 44px; height: 44px; background: none; border: none; padding: 10px; }
@@ -247,13 +250,11 @@
   .screenshot-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
   .game-cta { padding: 44px 20px; margin-top: 48px; }
   .game-cta h2 { font-size: 25px; }
-  .editorial-header { padding: 42px 0 34px; }
-  .editorial-header h1 { font-size: 34px; margin: 16px 0 20px; }
-  .editorial-header > p { font-size: 15px; }
-  .about-image > img { aspect-ratio: 1.2; }
-  .about-story { grid-template-columns: 1fr; gap: 20px; padding-top: 30px; }
-  .about-story h2 { font-size: 27px; }
-  .about-story p { font-size: 15px; }
+  .about-header { grid-template-columns: 1fr; gap: 24px; padding: 40px 0 32px; }
+  .about-header h1 { margin: 12px 0 16px; }
+  .about-intro { font-size: 18px; }
+  .about-work { grid-template-columns: 1fr; gap: 28px; padding-top: 32px; }
+  .about-work-copy h2 { margin-bottom: 16px; }
   .contact-heading { padding: 38px 0 28px; }
   .contact-heading p { font-size: 15px; }
   .contact-details { padding-top: 24px; }
