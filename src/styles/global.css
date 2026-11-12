@@ -77,14 +77,19 @@ a:focus-visible {
 
 .shell { width: min(84.895833vw, 1630px); margin-inline: auto; }
 
-@media (width > 760px) {
-  .shell { zoom: 50%; }
+@media (min-width: 761px) {
+  .shell:not(.header-inner) { zoom: 50%; }
 }
 
 .site-header,
 .site-footer {
   background: var(--purple);
   color: var(--white);
+}
+
+.site-header {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 .header-inner {
@@ -177,6 +182,43 @@ a:focus-visible {
   background: currentColor;
   clip-path: polygon(0 0, 50% 55%, 100% 0, 100% 10%, 50% 65%, 0 10%);
   content: "";
+}
+
+@media (min-width: 761px) {
+  .header-inner {
+    width: min(42.447917vw, 815px);
+    height: 42.5px;
+    min-height: 0;
+    gap: 8px;
+  }
+
+  .header-brand {
+    font-size: 14.5px;
+    line-height: 21px;
+    transform: translateY(-1px);
+  }
+
+  .navigation {
+    gap: 15px;
+    font-size: 9px;
+    line-height: 12px;
+    transform: translateY(1.5px);
+  }
+
+  .nav-pages { gap: 15px; }
+  .nav-pages a { padding-block: 5px; }
+
+  .nav-pages a:hover::after,
+  .nav-pages a[aria-current="page"]::after { bottom: 2px; }
+
+  .site-language {
+    height: 9px;
+    padding-left: 19px;
+    margin-left: -2.5px;
+  }
+
+  .header-email { width: 14px; height: 22px; margin-left: 9.5px; }
+  .header-email .envelope { width: 12px; height: 9px; }
 }
 
 .game-hero {
