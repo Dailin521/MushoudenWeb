@@ -59,14 +59,14 @@ const emailLink = `mailto:${studio.email}`;
       <slot />
     </main>
     <footer class="site-footer">
-      <div class="footer-inner">
+      <div class="shell footer-inner">
         <div class="footer-studio">
           <a class="footer-brand" href={sitePath('/')} translate="no">{studio.name}</a>
           <p>{studio.description}</p>
         </div>
         <div class="footer-contact">
           <a class="footer-contact-page" href={sitePath('/contact/')}>Contact Us <span class="envelope" aria-hidden="true"></span></a>
-          <a class="footer-email" href={emailLink}>{studio.email}</a>
+          <p><a href={emailLink}>{studio.email}</a></p>
         </div>
       </div>
     </footer>
