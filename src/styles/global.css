@@ -259,6 +259,49 @@ a:focus-visible {
 .game-screenshots img { width: 100%; }
 .game-screenshots li:first-child { margin-top: 1px; }
 
+@media (min-width: 761px) and (max-height: 1115px) {
+  .shell.games-page {
+    /* Use the displayed sizes directly so viewport units are independent of the 50% shell zoom. */
+    --shortfall: calc(1116px - 100svh);
+    --intro-space: min(2.552083vw, clamp(16px, calc(49px - var(--shortfall) * .14), 49px));
+    --gallery-space: min(3.776042vw, clamp(16px, calc(72.5px - var(--shortfall) * .22), 72.5px));
+    --bottom-space: min(5.182292vw, clamp(14px, calc(99.5px - var(--shortfall) * .38), 99.5px));
+    /* Reserve room for the header, copy, screenshot row and footer at the full desktop width. */
+    --hero-height: clamp(260px, calc(100svh - 421px - var(--intro-space) - var(--gallery-space) - var(--bottom-space)), 475px);
+    width: min(42.447917vw, 815px);
+    zoom: 1;
+  }
+
+  .game-hero {
+    width: min(calc(100% + .5px), calc(var(--hero-height) * 1631 / 950));
+    max-width: 815.5px;
+    margin-inline: auto;
+    transform: translateX(min(1.302083vw, 25px));
+  }
+
+  .game-intro { padding: var(--intro-space) 0 0 2px; }
+
+  .game-intro h1 {
+    margin-bottom: min(1.041667vw, 20px);
+    font-size: clamp(17px, 1.510417vw, 29px);
+  }
+
+  .game-intro p {
+    padding-left: 1.5px;
+    font-size: clamp(8.5px, .598958vw, 11.5px);
+  }
+
+  .game-intro p + p { margin-top: 11px; }
+
+  .game-screenshots {
+    gap: min(.481771vw, 9.25px);
+    margin-top: var(--gallery-space);
+    padding-bottom: var(--bottom-space);
+  }
+
+  .game-screenshots li:first-child { margin-top: .5px; }
+}
+
 .short-page { min-height: min(58.125vw, 1116px); }
 
 .about-page {
