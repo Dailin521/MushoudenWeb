@@ -218,7 +218,7 @@ button:focus-visible {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.578125rem;
   margin-top: 4.53125rem;
-  padding: 0 0 6.21875rem;
+  padding: 0 0 5.5369318182rem;
   list-style: none;
 }
 
