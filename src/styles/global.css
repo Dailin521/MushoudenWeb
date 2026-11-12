@@ -11,7 +11,9 @@
   --lavender: #ddceeb;
   --ink: #000;
   --white: #fff;
-  --site-gutter: clamp(22px, 5vw, 80px);
+  --site-gutter: clamp(1.375rem, 5vw, 5rem);
+  /* Fixed lengths use rem; respect the browser default font size. */
+  font-size: 100%;
   font-family: "Noto Sans SC", "Segoe UI", sans-serif;
   color: var(--ink);
   background: var(--lavender);
@@ -46,21 +48,21 @@ img {
 a {
   color: inherit;
   touch-action: manipulation;
-  text-decoration-thickness: 1px;
+  text-decoration-thickness: 0.0625rem;
   text-underline-offset: .24em;
 }
 
 a:focus-visible,
 button:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 4px;
+  outline: 0.125rem solid currentColor;
+  outline-offset: 0.25rem;
 }
 
 .visually-hidden,
 .skip-link:not(:focus) {
   position: absolute;
-  width: 1px;
-  height: 1px;
+  width: 0.0625rem;
+  height: 0.0625rem;
   padding: 0;
   overflow: hidden;
   clip-path: inset(50%);
@@ -70,14 +72,14 @@ button:focus-visible {
 .skip-link:focus {
   position: absolute;
   z-index: 30;
-  top: 12px;
-  left: 16px;
-  padding: 10px 16px;
+  top: 0.75rem;
+  left: 1rem;
+  padding: 0.625rem 1rem;
   background: var(--white);
   color: var(--purple);
 }
 
-.shell { width: min(815px, calc(100% - 40px)); margin-inline: auto; }
+.shell { width: min(50.9375rem, calc(100% - 2.5rem)); margin-inline: auto; }
 
 .site-header,
 .site-footer {
@@ -86,7 +88,7 @@ button:focus-visible {
 }
 
 .site-header {
-  font: 16px/1.85 "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font: 1rem/1.85 "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
@@ -95,9 +97,9 @@ button:focus-visible {
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: clamp(18px, 2vw, 32px);
-  width: min(1440px, calc(100% - 2 * var(--site-gutter)));
-  min-height: 92px;
+  gap: clamp(1.125rem, 2vw, 2rem);
+  width: min(90rem, calc(100% - 2 * var(--site-gutter)));
+  min-height: 5.75rem;
   margin-inline: auto;
   position: relative;
 }
@@ -105,8 +107,8 @@ button:focus-visible {
 .header-brand {
   display: flex;
   align-items: center;
-  padding-block: 17px;
-  font-size: 30px;
+  padding-block: 1.0625rem;
+  font-size: 1.875rem;
   font-weight: 750;
   line-height: 1;
   letter-spacing: -.05em;
@@ -124,10 +126,10 @@ button:focus-visible {
 }
 
 .navigation {
-  --nav-gap: clamp(20px, 2vw, 32px);
+  --nav-gap: clamp(1.25rem, 2vw, 2rem);
   justify-self: end;
   gap: var(--nav-gap);
-  font-size: 15px;
+  font-size: 0.9375rem;
 }
 
 .nav-pages {
@@ -139,7 +141,7 @@ button:focus-visible {
 .nav-pages a {
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
+  min-height: 2.75rem;
   position: relative;
   text-decoration: none;
 }
@@ -147,36 +149,36 @@ button:focus-visible {
 .nav-pages a:hover::after,
 .nav-pages a[aria-current="page"]::after {
   position: absolute;
-  inset: auto 0 5px;
-  border-bottom: 1px solid currentColor;
+  inset: auto 0 0.3125rem;
+  border-bottom: 0.0625rem solid currentColor;
   content: "";
 }
 
 .nav-divider {
-  width: 1px;
-  height: 20px;
+  width: 0.0625rem;
+  height: 1.25rem;
   background: rgb(255 255 255 / .32);
 }
 
-.site-language { font-size: 13px; font-weight: 600; }
+.site-language { font-size: 0.8125rem; font-weight: 600; }
 .menu-toggle { display: none; }
 
 .header-email {
   display: grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
+  width: 2.75rem;
+  height: 2.75rem;
 }
 
 .envelope {
   position: relative;
   display: inline-block;
   flex: none;
-  width: 18px;
-  height: 14px;
+  width: 1.125rem;
+  height: 0.875rem;
   overflow: hidden;
-  border: 1px solid currentColor;
-  border-radius: 2px;
+  border: 0.0625rem solid currentColor;
+  border-radius: 0.125rem;
 }
 
 .envelope::before {
@@ -188,88 +190,88 @@ button:focus-visible {
 }
 
 .game-hero {
-  width: calc(100% + .5px);
-  max-width: 815.5px;
+  width: calc(100% + 0.03125rem);
+  max-width: 50.96875rem;
   margin-inline: auto;
-  transform: translateX(min(25px, 2.5vw));
+  transform: translateX(min(1.5625rem, 2.5vw));
 }
 
-.game-intro { padding: 49px 0 0 2px; }
+.game-intro { padding: 3.0625rem 0 0 0.125rem; }
 
 .game-intro h1 {
-  margin-bottom: 20px;
-  font-size: 29px;
+  margin-bottom: 1.25rem;
+  font-size: 1.8125rem;
   font-weight: 700;
   line-height: 1.24138;
 }
 
 .game-intro p {
-  padding-left: 1.5px;
-  font-size: 11.5px;
+  padding-left: 0.09375rem;
+  font-size: 0.71875rem;
   line-height: 1.173913;
 }
 
-.game-intro p + p { margin-top: 11px; }
+.game-intro p + p { margin-top: 0.6875rem; }
 
 .game-screenshots {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 9.25px;
-  margin-top: 72.5px;
-  padding: 0 0 99.5px;
+  gap: 0.578125rem;
+  margin-top: 4.53125rem;
+  padding: 0 0 6.21875rem;
   list-style: none;
 }
 
 .game-screenshots img { width: 100%; }
-.game-screenshots li:first-child { margin-top: .5px; }
+.game-screenshots li:first-child { margin-top: 0.03125rem; }
 
-.short-page { min-height: 558px; }
+.short-page { min-height: 34.875rem; }
 
 .about-page {
-  padding-top: 136.5px;
+  padding-top: 8.53125rem;
   text-align: center;
 }
 
-.about-page img { width: 206.5px; margin-inline: auto; }
+.about-page img { width: 12.90625rem; margin-inline: auto; }
 
 .about-page p {
-  margin-top: 31.5px;
-  font-size: 11.5px;
-  line-height: 17px;
+  margin-top: 1.96875rem;
+  font-size: 0.71875rem;
+  line-height: 1.0625rem;
 }
 
-.contact-page { padding-block: 31px 32px; }
+.contact-page { padding-block: 1.9375rem 2rem; }
 
 .contact-page h1 {
-  padding-left: 1.5px;
-  font-size: 25.5px;
+  padding-left: 0.09375rem;
+  font-size: 1.59375rem;
   font-weight: 700;
-  line-height: 33.5px;
+  line-height: 2.09375rem;
 }
 
 .contact-page > p {
-  margin-top: 9.5px;
-  font-size: 12px;
-  line-height: 16.5px;
+  margin-top: 0.59375rem;
+  font-size: 0.75rem;
+  line-height: 1.03125rem;
 }
 
 .contact-details {
-  margin-top: 46px;
-  padding-top: 25.5px;
-  border-top: 1px dotted var(--purple);
+  margin-top: 2.875rem;
+  padding-top: 1.59375rem;
+  border-top: 0.0625rem dotted var(--purple);
 }
 
 .contact-details h2 {
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 700;
-  line-height: 18px;
+  line-height: 1.125rem;
 }
 
 .contact-details a {
   display: inline-block;
-  margin-top: 5px;
-  font-size: 18px;
-  line-height: 25px;
+  margin-top: 0.3125rem;
+  font-size: 1.125rem;
+  line-height: 1.5625rem;
   text-decoration: none;
   overflow-wrap: anywhere;
 }
@@ -279,49 +281,49 @@ button:focus-visible {
 .footer-inner {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 12px;
+  gap: 0.75rem;
   align-items: start;
-  min-height: 109px;
-  padding-block: 24px 26px;
-  font-size: 12px;
-  line-height: 16.5px;
+  min-height: 6.8125rem;
+  padding-block: 1.5rem 1.625rem;
+  font-size: 0.75rem;
+  line-height: 1.03125rem;
 }
 
 .footer-brand,
 .footer-contact-page {
   display: inline-flex;
   align-items: center;
-  gap: 6.5px;
-  min-height: 24px;
+  gap: 0.40625rem;
+  min-height: 1.5rem;
   text-decoration: none;
 }
 
 .footer-brand {
-  font-size: 18.5px;
+  font-size: 1.15625rem;
   font-weight: 900;
-  transform: translateY(1px);
+  transform: translateY(0.0625rem);
 }
 
-.footer-contact-page { transform: translate(1px, 3px); }
+.footer-contact-page { transform: translate(0.0625rem, 0.1875rem); }
 
-.footer-inner p { margin-top: 15.5px; }
+.footer-inner p { margin-top: 0.96875rem; }
 .footer-inner p a { overflow-wrap: anywhere; text-decoration: none; }
 
 .footer-contact .envelope {
-  width: 12px;
-  height: 9px;
-  margin-top: 1px;
+  width: 0.75rem;
+  height: 0.5625rem;
+  margin-top: 0.0625rem;
   border-radius: 0;
 }
 
 .site-footer a:hover { text-decoration: underline; }
 
-@media (min-width: 1200px) {
+@media (min-width: 75rem) {
   .game-intro p:first-of-type { text-align: justify; }
 }
 
-@media (max-width: 1000px) {
-  .header-inner { min-height: 90px; }
+@media (max-width: 62.5rem) {
+  .header-inner { min-height: 5.625rem; }
   .header-email { grid-area: 1 / 2; justify-self: end; }
 
   .menu-toggle {
@@ -329,10 +331,10 @@ button:focus-visible {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 5px;
-    width: 44px;
-    height: 44px;
-    padding: 10px;
+    gap: 0.3125rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0.625rem;
     border: 0;
     color: inherit;
     background: transparent;
@@ -340,18 +342,18 @@ button:focus-visible {
     touch-action: manipulation;
   }
 
-  .menu-toggle span { width: 24px; height: 1px; background: currentColor; }
-  .menu-toggle[aria-expanded="true"] span:first-child { transform: translateY(6px) rotate(45deg); }
+  .menu-toggle span { width: 1.5rem; height: 0.0625rem; background: currentColor; }
+  .menu-toggle[aria-expanded="true"] span:first-child { transform: translateY(0.375rem) rotate(45deg); }
   .menu-toggle[aria-expanded="true"] span:nth-child(2) { visibility: hidden; }
-  .menu-toggle[aria-expanded="true"] span:last-child { transform: translateY(-6px) rotate(-45deg); }
+  .menu-toggle[aria-expanded="true"] span:last-child { transform: translateY(-0.375rem) rotate(-45deg); }
 
   .navigation {
     position: absolute;
     z-index: 20;
     inset: 100% calc(-1 * var(--site-gutter)) auto;
     display: none;
-    padding: 12px var(--site-gutter) 24px;
-    border-top: 1px solid rgb(255 255 255 / .2);
+    padding: 0.75rem var(--site-gutter) 1.5rem;
+    border-top: 0.0625rem solid rgb(255 255 255 / .2);
     background: var(--purple);
   }
 
@@ -359,63 +361,78 @@ button:focus-visible {
   .nav-pages {
     flex-direction: column;
     align-items: flex-start;
-    gap: 5px;
+    gap: 0.3125rem;
   }
 
   .navigation.is-open { display: flex; }
-  .nav-pages a { min-height: 46px; }
-  .nav-divider { width: 100%; height: 1px; margin-block: 8px; }
+  .nav-pages a { min-height: 2.875rem; }
+  .nav-divider { width: 100%; height: 0.0625rem; margin-block: 0.5rem; }
 }
 
-@media (max-width: 760px) {
-  .game-hero { width: 100%; margin-top: 10px; transform: none; }
-  .game-intro { padding: 32px 0 0; }
-  .game-intro h1 { margin-bottom: 16px; font-size: 34px; }
-  .game-intro p { padding-left: 0; font-size: 17px; line-height: 1.5; }
-  .game-intro p + p { margin-top: 22px; }
+@media (max-width: 47.5rem) {
+  .game-hero { width: 100%; margin-top: 0.625rem; transform: none; }
+  .game-intro { padding: 2rem 0 0; }
+  .game-intro h1 { margin-bottom: 1rem; font-size: 2.125rem; }
+  .game-intro p { padding-left: 0; font-size: 1.0625rem; line-height: 1.5; }
+  .game-intro p + p { margin-top: 1.375rem; }
 
   .game-screenshots {
     grid-template-columns: 1fr;
-    gap: 14px;
-    margin-top: 36px;
-    padding-bottom: 54px;
+    gap: 0.875rem;
+    margin-top: 2.25rem;
+    padding-bottom: 3.375rem;
   }
 
   .game-screenshots li:first-child { margin-top: 0; }
   .short-page { min-height: 0; }
-  .about-page { padding-block: 90px 110px; }
-  .about-page img { width: 413px; }
-  .about-page p { margin-top: 32px; font-size: 18px; line-height: 1.55; }
-  .contact-page { padding-block: 38px 70px; }
-  .contact-page h1 { padding-left: 3px; font-size: 38px; line-height: 1.2; }
-  .contact-page > p { margin-top: 19px; font-size: 18px; line-height: 1.55; }
-  .contact-details { margin-top: 42px; padding-top: 26px; }
-  .contact-details h2 { font-size: 24px; line-height: 36px; }
-  .contact-details a { margin-top: 10px; font-size: 25px; line-height: 1.45; }
+  .about-page { padding-block: 5.625rem 6.875rem; }
+  .about-page img { width: 25.8125rem; }
+  .about-page p { margin-top: 2rem; font-size: 1.125rem; line-height: 1.55; }
+  .contact-page { padding-block: 2.375rem 4.375rem; }
+  .contact-page h1 { padding-left: 0.1875rem; font-size: 2.375rem; line-height: 1.2; }
+  .contact-page > p { margin-top: 1.1875rem; font-size: 1.125rem; line-height: 1.55; }
+  .contact-details { margin-top: 2.625rem; padding-top: 1.625rem; }
+  .contact-details h2 { font-size: 1.5rem; line-height: 2.25rem; }
+  .contact-details a { margin-top: 0.625rem; font-size: 1.5625rem; line-height: 1.45; }
 
   .footer-inner {
     grid-template-columns: 1fr;
-    gap: 24px;
-    min-height: 218px;
-    padding-block: 24px 30px;
-    font-size: 18px;
+    gap: 1.5rem;
+    min-height: 13.625rem;
+    padding-block: 1.5rem 1.875rem;
+    font-size: 1.125rem;
     line-height: 1.55;
   }
 
   .footer-brand,
-  .footer-contact-page { gap: 13px; min-height: 40px; transform: none; }
-  .footer-brand { font-size: 26px; }
-  .footer-inner p { margin-top: 6px; }
-  .footer-contact .envelope { width: 22px; height: 16px; margin-top: 2px; }
+  .footer-contact-page { gap: 0.8125rem; min-height: 2.5rem; transform: none; }
+  .footer-brand { font-size: 1.625rem; }
+  .footer-inner p { margin-top: 0.375rem; }
+  .footer-contact .envelope { width: 1.375rem; height: 1rem; margin-top: 0.125rem; }
 }
 
-@media (max-width: 700px) {
-  :root { --site-gutter: 24px; }
-  .header-inner { min-height: 85px; }
-  .header-brand { font-size: 27px; }
+@media (max-width: 43.75rem) {
+  :root { --site-gutter: 1.5rem; }
+  .header-inner { min-height: 5.3125rem; }
+  .header-brand { font-size: 1.6875rem; }
 }
 
-@media (max-width: 660px) {
-  .header-inner { grid-template-columns: 1fr auto auto; column-gap: 12px; row-gap: 0; }
-  .header-brand { min-height: 78px; }
+@media (max-width: 41.25rem) {
+  .header-inner { grid-template-columns: 1fr auto auto; column-gap: 0.75rem; row-gap: 0; }
+  .header-brand { min-height: 4.875rem; }
+}
+
+/* Keep navigation reachable on very narrow screens or with larger default text. */
+@media (max-width: 19rem) {
+  .header-inner { grid-template-columns: 1fr 1fr; padding-bottom: 0.75rem; }
+  .header-brand {
+    grid-column: 1 / -1;
+    justify-content: center;
+    min-height: 0;
+    padding-bottom: 0.5rem;
+    text-align: center;
+    white-space: normal;
+  }
+  .header-email { grid-area: 2 / 1; }
+  .menu-toggle { grid-area: 2 / 2; justify-self: start; }
 }
