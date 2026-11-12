@@ -13,7 +13,7 @@
   --white: #fff;
   --site-gutter: clamp(1.375rem, 5vw, 5rem);
   /* Fixed lengths use rem; respect the browser default font size. */
-  font-size: 100%;
+  font-size: 110%;
   font-family: "Noto Sans SC", "Segoe UI", sans-serif;
   color: var(--ink);
   background: var(--lavender);
@@ -425,7 +425,7 @@ p.contact-intro { font-size: 1rem; }
 }
 
 /* Keep navigation reachable on very narrow screens or with larger default text. */
-@media (max-width: 19rem) {
+@media (max-width: 20.9rem) {
   .header-inner { grid-template-columns: 1fr 1fr; padding-bottom: 0.75rem; }
   .header-brand {
     grid-column: 1 / -1;

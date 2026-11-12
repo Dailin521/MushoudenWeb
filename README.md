@@ -18,7 +18,7 @@ GitHub Actions deploys pushes to `main` at [the existing GitHub Pages site](http
 
 ## Sizing
 
-Fixed CSS lengths and responsive breakpoints use `rem`, converted from the approved layout at a 16px default root font size. The root stays at `100%` to respect browser font preferences. Percentage/viewport sizing, unitless line heights, and font-relative letter spacing, underline offsets, and the Contact heading's cap-height spacing retain their proportional behavior. The navigation's JavaScript media query must match the CSS breakpoint.
+Fixed CSS lengths and responsive breakpoints use `rem`, converted from the approved layout at a 16px default root font size. The root uses `110%` for the approved 1.1× scale while respecting browser font preferences. Percentage/viewport sizing, unitless line heights, and font-relative letter spacing, underline offsets, and the Contact heading's cap-height spacing retain their proportional behavior. Media-query rem units refer to the browser's default font size, not the root override. The navigation's JavaScript media query must match the CSS breakpoint.
 
 ## Artwork
 
