@@ -1,4 +1,16 @@
 ---
-import ContactPage from '../components/ContactPage.astro';
+import Layout from '../layouts/Layout.astro';
+import { studio } from '../lib/site';
+
+const [emailName, emailDomain] = studio.email.split('@');
 ---
-<ContactPage locale="zh" />
+<Layout title="Contact Us" page="/contact/">
+  <div class="shell short-page contact-page">
+    <h1>Contact Us</h1>
+    <p>{studio.description}</p>
+    <section class="contact-details" aria-labelledby="email-title">
+      <h2 id="email-title">Email</h2>
+      <a href={`mailto:${studio.email}`}>{emailName}@<wbr />{emailDomain}</a>
+    </section>
+  </div>
+</Layout>

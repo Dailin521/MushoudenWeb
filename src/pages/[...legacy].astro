@@ -1,0 +1,26 @@
+---
+import { sitePath, type PagePath } from '../lib/site';
+
+interface Props {
+  destination: PagePath;
+}
+
+export function getStaticPaths() {
+  const redirects: Record<string, PagePath> = {
+    games: '/',
+    en: '/',
+    'en/games': '/',
+    'en/about': '/about/',
+    'en/contact': '/contact/',
+    community: '/contact/',
+    'en/community': '/contact/',
+  };
+
+  return Object.entries(redirects).map(([legacy, destination]) => ({
+    params: { legacy },
+    props: { destination },
+  }));
+}
+
+return Astro.redirect(sitePath(Astro.props.destination), 301);
+---

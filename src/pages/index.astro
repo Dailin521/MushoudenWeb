@@ -1,4 +1,32 @@
 ---
-import NewsList from '../components/NewsList.astro';
+import Layout from '../layouts/Layout.astro';
+import { game, imagePath, studio } from '../lib/site';
+
+const screenshots = [
+  { file: 'battle', alt: 'An active battle on the Gods on Duty defense grid' },
+  { file: 'match', alt: 'The Match Found screen with two players’ ranks and win rates' },
+  { file: 'heroes', alt: 'Prometheus, Achilles, Hector, and Perseus with their equipment' },
+];
 ---
-<NewsList locale="zh" />
+<Layout title={game.title} page="/" description={game.description}>
+  <div class="shell games-page">
+    <img
+      class="game-hero"
+      src={imagePath('gods-on-duty')}
+      width="1631"
+      height="950"
+      alt="Gods on Duty logo and Zeus above scenes from the game"
+      fetchpriority="high"
+    />
+    <section class="game-intro" aria-labelledby="game-title">
+      <h1 id="game-title" translate="no">{game.title.toUpperCase()}</h1>
+      <p>{game.description}</p>
+      <p>{studio.description}</p>
+    </section>
+    <ul class="game-screenshots" aria-label="Game screenshots">
+      {screenshots.map(({ file, alt }) => (
+        <li><img src={imagePath(file)} width="531" height="321" alt={alt} loading="lazy" decoding="async" /></li>
+      ))}
+    </ul>
+  </div>
+</Layout>

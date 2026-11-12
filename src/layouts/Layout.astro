@@ -1,81 +1,70 @@
 ---
 import '../styles/global.css';
-import { asset, copy, site, url, type Locale } from '../lib/site';
-interface Props { locale: Locale; title?: string; description?: string; section?: string; pathname?: string; image?: string; article?: boolean; noIndex?: boolean }
-const { locale, title, description, section = 'news', pathname = '', image = '/media/game/steam-zh.webp', article = false, noIndex = false } = Astro.props;
-const t = copy[locale];
-const otherLocale = locale === 'zh' ? 'en' : 'zh';
-const paths = ['', 'games', 'about', 'contact'];
-const sections = ['news', 'games', 'about', 'contact'];
-const fullTitle = title ? `${title} — ${t.studio}` : `${t.studio} · ${locale === 'zh' ? '猛将三国' : 'Three Kingdoms: Mushouden'}`;
-const canonical = Astro.site && !noIndex ? new URL(url(locale, pathname), Astro.site).href : undefined;
-const absoluteImage = Astro.site ? new URL(asset(image), Astro.site).href : asset(image);
+import { imagePath, navigation, sitePath, studio, type PagePath } from '../lib/site';
+
+interface Props {
+  title: string;
+  page?: PagePath;
+  description?: string;
+}
+
+const { title, page, description = studio.description } = Astro.props;
+const canonical = page && Astro.site ? new URL(sitePath(page), Astro.site).href : undefined;
+const shareImage = imagePath(page === '/' ? 'gods-on-duty' : 'studio-logo');
+const emailLink = `mailto:${studio.email}`;
 ---
 <!doctype html>
-<html lang={locale === 'zh' ? 'zh-CN' : 'en'}>
+<html lang="en">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={description || t.description} />
-    <meta name="theme-color" content="#365c4b" />
-    {noIndex && <meta name="robots" content="noindex" />}
-    <title>{fullTitle}</title>
-    <link rel="icon" type="image/svg+xml" href={asset("/favicon.svg")} />
+    <meta name="theme-color" content="#4a355e" />
+    <title>{title} | {studio.name}</title>
+    <meta name="description" content={description} />
     {canonical && <link rel="canonical" href={canonical} />}
-    {!noIndex && (['zh', 'en'] as Locale[]).map(lang => <link rel="alternate" hreflang={lang === 'zh' ? 'zh-CN' : 'en'} href={Astro.site ? new URL(url(lang, pathname), Astro.site).href : url(lang, pathname)} />)}
-    <meta property="og:type" content={article ? 'article' : 'website'} />
-    <meta property="og:site_name" content={t.studio} />
-    <meta property="og:title" content={fullTitle} />
-    <meta property="og:description" content={description || t.description} />
-    <meta property="og:image" content={absoluteImage} />
-    <meta property="og:locale" content={locale === 'zh' ? 'zh_CN' : 'en_US'} />
+    {!page && <meta name="robots" content="noindex" />}
+    <meta property="og:title" content={`${title} | ${studio.name}`} />
+    <meta property="og:description" content={description} />
     {canonical && <meta property="og:url" content={canonical} />}
-    <meta name="twitter:card" content="summary_large_image" />
+    {Astro.site && <meta property="og:image" content={new URL(shareImage, Astro.site).href} />}
+    <link rel="icon" type="image/webp" href={imagePath('studio-logo')} />
+    <link rel="preload" href={sitePath('/fonts/noto-sans-sc-latin.woff2')} as="font" type="font/woff2" crossorigin="anonymous" />
   </head>
   <body>
-    <a class="skip-link" href="#main">{t.skip}</a>
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <header class="site-header">
-      <div class="header-inner">
-        <a class="wordmark" href={url(locale)} aria-label={t.studio}>
-          <span class="wordmark-name">{site.name}</span>
-        </a>
-        <button class="menu-toggle" aria-label={t.menu} aria-expanded="false" aria-controls="main-nav"><span></span><span></span><span></span></button>
-        <nav id="main-nav" class="main-nav" aria-label={locale === 'zh' ? '主导航' : 'Main navigation'}>
-          {t.nav.map((label, i) => <a class:list={{ active: section === sections[i] }} aria-current={section === sections[i] ? 'page' : undefined} href={url(locale, paths[i])}>{label}</a>)}
-          <span class="nav-divider" aria-hidden="true"></span>
-          <a class="language-switch" href={url(otherLocale, noIndex ? '' : pathname)} lang={otherLocale === 'zh' ? 'zh-CN' : 'en'} aria-label={locale === 'zh' ? 'Switch to English' : '切换为简体中文'}>{locale === 'zh' ? 'EN' : '中文'}<span aria-hidden="true"> ↗</span></a>
+      <div class="shell header-inner">
+        <a class="brand header-brand" href={sitePath('/')} translate="no">{studio.name}</a>
+        <nav class="navigation" aria-label="Main navigation">
+          <ul class="nav-pages">
+            {navigation.map(({ label, path }) => (
+              <li><a href={sitePath(path)} aria-current={page === path ? 'page' : undefined}>{label}</a></li>
+            ))}
+          </ul>
+          <span class="site-language">
+            <span aria-hidden="true">EN</span>
+            <span class="visually-hidden">Site language: English</span>
+          </span>
+          <a class="header-email" href={emailLink} aria-label={`Email ${studio.name}`}>
+            <span class="envelope" aria-hidden="true"></span>
+          </a>
         </nav>
-        <a class="header-email" href={`mailto:${site.email}`} aria-label={`${t.email}: ${site.email}`} title={`${t.email}: ${site.email}`}>
-          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg>
-        </a>
       </div>
     </header>
-    <main id="main" tabindex="-1"><slot /></main>
+    <main id="main-content" tabindex="-1">
+      <slot />
+    </main>
     <footer class="site-footer">
-      <div class="footer-inner">
-        <div class="footer-about">
-          <a class="footer-brand" href={url(locale)}>{site.name}</a>
-          <p>{t.operatedBy}</p>
+      <div class="shell footer-inner">
+        <div class="footer-studio">
+          <a class="brand footer-brand" href={sitePath('/')} translate="no">{studio.name}</a>
+          <p>{studio.description}</p>
         </div>
-        <div class="footer-contact"><span class="eyebrow">{t.contactTitle}</span>
-          <a href={`mailto:${site.email}`}>{site.email}</a>
+        <div class="footer-contact">
+          <a class="footer-contact-page" href={sitePath('/contact/')}>Contact Us <span class="envelope" aria-hidden="true"></span></a>
+          <p><a href={emailLink}>{studio.email}</a></p>
         </div>
       </div>
-      <div class="footer-bottom"><span>© {new Date().getFullYear()} {t.copyright}</span><span>{t.tagline}</span></div>
     </footer>
-    <script>
-      import { asset } from '../lib/site';
-      const menu = document.querySelector<HTMLButtonElement>('.menu-toggle');
-      const nav = document.querySelector<HTMLElement>('#main-nav');
-      function closeMenu() { menu?.setAttribute('aria-expanded', 'false'); nav?.classList.remove('is-open'); }
-      menu?.addEventListener('click', () => { const open = menu.getAttribute('aria-expanded') !== 'true'; menu.setAttribute('aria-expanded', String(open)); nav?.classList.toggle('is-open', open); });
-      document.addEventListener('keydown', event => { if (event.key === 'Escape' && menu?.getAttribute('aria-expanded') === 'true') { closeMenu(); menu.focus(); } });
-      nav?.addEventListener('click', event => { if ((event.target as HTMLElement).closest('a')) closeMenu(); });
-      document.querySelectorAll<HTMLImageElement>('img[src]').forEach(img => {
-        const fallback = () => { if (!img.src.endsWith('/media/game/strategy.webp')) { img.srcset = ''; img.src = asset('/media/game/strategy.webp'); } };
-        img.addEventListener('error', fallback, { once: true });
-        if (img.complete && img.naturalWidth === 0) fallback();
-      });
-    </script>
   </body>
 </html>
