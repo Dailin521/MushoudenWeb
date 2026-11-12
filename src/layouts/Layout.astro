@@ -33,38 +33,64 @@ const emailLink = `mailto:${studio.email}`;
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
     <header class="site-header">
-      <div class="shell header-inner">
-        <a class="brand header-brand" href={sitePath('/')} translate="no">{studio.name}</a>
-        <nav class="navigation" aria-label="Main navigation">
+      <div class="header-inner">
+        <a class="header-brand" href={sitePath('/')} translate="no">{studio.name}</a>
+        <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="site-navigation">
+          <span></span><span></span><span></span>
+        </button>
+        <nav id="site-navigation" class="navigation" aria-label="Main navigation">
           <ul class="nav-pages">
             {navigation.map(({ label, path }) => (
               <li><a href={sitePath(path)} aria-current={page === path ? 'page' : undefined}>{label}</a></li>
             ))}
           </ul>
+          <span class="nav-divider" aria-hidden="true"></span>
           <span class="site-language">
             <span aria-hidden="true">EN</span>
             <span class="visually-hidden">Site language: English</span>
           </span>
-          <a class="header-email" href={emailLink} aria-label={`Email ${studio.name}`}>
-            <span class="envelope" aria-hidden="true"></span>
-          </a>
         </nav>
+        <a class="header-email" href={emailLink} aria-label={`Email ${studio.name}`}>
+          <span class="envelope" aria-hidden="true"></span>
+        </a>
       </div>
     </header>
     <main id="main-content" tabindex="-1">
       <slot />
     </main>
     <footer class="site-footer">
-      <div class="shell footer-inner">
+      <div class="footer-inner">
         <div class="footer-studio">
-          <a class="brand footer-brand" href={sitePath('/')} translate="no">{studio.name}</a>
+          <a class="footer-brand" href={sitePath('/')} translate="no">{studio.name}</a>
           <p>{studio.description}</p>
         </div>
         <div class="footer-contact">
           <a class="footer-contact-page" href={sitePath('/contact/')}>Contact Us <span class="envelope" aria-hidden="true"></span></a>
-          <p><a href={emailLink}>{studio.email}</a></p>
+          <a class="footer-email" href={emailLink}>{studio.email}</a>
         </div>
       </div>
     </footer>
+    <script>
+      const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+      const navigation = document.querySelector<HTMLElement>('#site-navigation');
+
+      function setMenu(open: boolean) {
+        toggle?.setAttribute('aria-expanded', String(open));
+        toggle?.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+        navigation?.classList.toggle('is-open', open);
+      }
+
+      toggle?.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
+      navigation?.addEventListener('click', event => {
+        if (event.target instanceof Element && event.target.closest('a')) setMenu(false);
+      });
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && toggle?.getAttribute('aria-expanded') === 'true') {
+          setMenu(false);
+          toggle.focus();
+        }
+      });
+      matchMedia('(max-width: 1000px)').addEventListener('change', () => setMenu(false));
+    </script>
   </body>
 </html>
