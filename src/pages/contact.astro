@@ -7,7 +7,7 @@ const [emailName, emailDomain] = studio.email.split('@');
 <Layout title="Contact Us" page="/contact/">
   <div class="shell short-page contact-page">
     <h1>Contact Us</h1>
-    <p>{studio.description}</p>
+    <p class="contact-intro">{studio.description}</p>
     <section class="contact-details" aria-labelledby="email-title">
       <h2 id="email-title">Email</h2>
       <a href={`mailto:${studio.email}`}>{emailName}@<wbr />{emailDomain}</a>

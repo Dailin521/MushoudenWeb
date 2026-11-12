@@ -236,7 +236,7 @@ button:focus-visible {
 
 .about-page p {
   margin-top: 1.96875rem;
-  font-size: 0.71875rem;
+  font-size: 1rem;
   line-height: 1.0625rem;
 }
 
@@ -254,6 +254,8 @@ button:focus-visible {
   font-size: 0.75rem;
   line-height: 1.03125rem;
 }
+
+p.contact-intro { font-size: 1rem; }
 
 .contact-details {
   margin-top: 2.875rem;
