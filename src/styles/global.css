@@ -75,7 +75,11 @@ a:focus-visible {
   color: var(--purple);
 }
 
-.shell { width: min(84.895833%, 1630px); margin-inline: auto; }
+.shell { width: min(84.895833vw, 1630px); margin-inline: auto; }
+
+@media (width > 760px) {
+  .shell { zoom: 50%; }
+}
 
 .site-header,
 .site-footer {
